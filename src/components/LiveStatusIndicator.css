@@ -1,0 +1,53 @@
+.live-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
+}
+
+.live-status span {
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.indicator-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.indicator-dot.offline {
+  background-color: #ff4444;
+}
+
+.indicator-dot.connecting {
+  background-color: #ffaa44;
+  animation: pulse-orange 1.5s ease-in-out infinite;
+}
+
+.indicator-dot.online {
+  background-color: #44ff44;
+  animation: pulse-green 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(68, 255, 68, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(68, 255, 68, 0);
+  }
+}
+
+@keyframes pulse-orange {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 170, 68, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 170, 68, 0);
+  }
+}
