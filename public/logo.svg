@@ -1,0 +1,94 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B46C1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333EA;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EF4444;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Rounded square background -->
+  <rect width="1024" height="1024" rx="200" fill="url(#bgGradient)"/>
+  
+  <!-- Globe/World representation -->
+  <circle cx="512" cy="450" r="240" fill="none" stroke="white" stroke-width="12" opacity="0.3"/>
+  <circle cx="512" cy="450" r="180" fill="none" stroke="white" stroke-width="8" opacity="0.2"/>
+  
+  <!-- Latitude lines -->
+  <ellipse cx="512" cy="450" rx="240" ry="80" fill="none" stroke="white" stroke-width="6" opacity="0.25"/>
+  <ellipse cx="512" cy="450" rx="240" ry="160" fill="none" stroke="white" stroke-width="6" opacity="0.25"/>
+  
+  <!-- Longitude line -->
+  <path d="M 512 210 Q 380 450 512 690" fill="none" stroke="white" stroke-width="6" opacity="0.25"/>
+  <path d="M 512 210 Q 644 450 512 690" fill="none" stroke="white" stroke-width="6" opacity="0.25"/>
+  
+  <!-- Translation symbol - Speech bubbles with different languages -->
+  <g filter="url(#glow)">
+    <!-- Left speech bubble (source language) -->
+    <rect x="280" y="340" width="160" height="100" rx="20" fill="white" opacity="0.95"/>
+    <path d="M 320 440 L 300 470 L 340 440 Z" fill="white" opacity="0.95"/>
+    
+    <!-- Text lines in left bubble -->
+    <rect x="300" y="360" width="120" height="12" rx="6" fill="url(#bgGradient)"/>
+    <rect x="300" y="385" width="90" height="12" rx="6" fill="url(#bgGradient)" opacity="0.7"/>
+    <rect x="300" y="410" width="100" height="12" rx="6" fill="url(#bgGradient)" opacity="0.5"/>
+    
+    <!-- Right speech bubble (target language) -->
+    <rect x="584" y="340" width="160" height="100" rx="20" fill="url(#accentGradient)" opacity="0.95"/>
+    <path d="M 704 440 L 724 470 L 684 440 Z" fill="url(#accentGradient)" opacity="0.95"/>
+    
+    <!-- Text lines in right bubble -->
+    <rect x="604" y="360" width="120" height="12" rx="6" fill="white"/>
+    <rect x="604" y="385" width="100" height="12" rx="6" fill="white" opacity="0.9"/>
+    <rect x="604" y="410" width="110" height="12" rx="6" fill="white" opacity="0.8"/>
+  </g>
+  
+  <!-- Translation arrows -->
+  <g filter="url(#glow)">
+    <!-- Arrow from left to right -->
+    <path d="M 450 390 L 570 390" stroke="white" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+    <path d="M 550 370 L 580 390 L 550 410" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"/>
+  </g>
+  
+  <!-- Microphone icon (for virtual/audio translation) -->
+  <g transform="translate(512, 580)" filter="url(#glow)">
+    <!-- Microphone body -->
+    <rect x="-25" y="-60" width="50" height="80" rx="25" fill="white"/>
+    <rect x="-25" y="-60" width="50" height="80" rx="25" fill="url(#accentGradient)" opacity="0.3"/>
+    
+    <!-- Microphone stand -->
+    <path d="M -40 40 Q 0 60 40 40" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <line x1="0" y1="20" x2="0" y2="50" stroke="white" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Sound waves -->
+    <path d="M -70 -20 Q -80 0 -70 20" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 70 -20 Q 80 0 70 20" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.6"/>
+    <path d="M -90 -30 Q -105 0 -90 30" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.4"/>
+    <path d="M 90 -30 Q 105 0 90 30" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.4"/>
+  </g>
+  
+  <!-- App name -->
+  <text x="512" y="780" font-family="'Inter', 'Segoe UI', sans-serif" font-size="52" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-1">
+    VIRTUAL TRANSLATOR
+  </text>
+  <text x="512" y="830" font-family="'Inter', 'Segoe UI', sans-serif" font-size="42" font-weight="500" fill="white" text-anchor="middle" opacity="0.9" letter-spacing="4">
+    STUDIO
+  </text>
+  
+  <!-- Decorative accent dots -->
+  <circle cx="200" cy="200" r="8" fill="white" opacity="0.3"/>
+  <circle cx="824" cy="200" r="10" fill="white" opacity="0.4"/>
+  <circle cx="200" cy="824" r="12" fill="white" opacity="0.35"/>
+  <circle cx="824" cy="750" r="8" fill="white" opacity="0.3"/>
+</svg>

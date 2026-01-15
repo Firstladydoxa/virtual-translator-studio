@@ -39,7 +39,9 @@ const CardScriptsList: React.FC<CardScriptsListProps> = ({ token, userRole }) =>
   const [loading, setLoading] = useState(true);
   const [selectedScript, setSelectedScript] = useState<CardScript | null>(null);
 
-  const API_URL = 'https://ministryprogs.tniglobal.org';
+  const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3001'
+    : 'https://ministryprogs.tniglobal.org';
 
   useEffect(() => {
     fetchScripts();

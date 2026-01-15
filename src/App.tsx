@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
@@ -11,6 +11,8 @@ import ManageSourceLink from './components/ManageSourceLink';
 import Sidebar from './components/Sidebar';
 import Home from './components/Home';
 import CardTranslationDashboard from './components/card-translation/CardTranslationDashboard';
+import NotificationCenter from './components/NotificationCenter';
+import oneSignalService from './services/oneSignalService';
 import './App.css';
 
 const AppContent: React.FC = () => {
@@ -19,6 +21,25 @@ const AppContent: React.FC = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('home');
+
+  // Initialize OneSignal when user is authenticated
+  useEffect(() => {
+    if (isAuthenticated && token) {
+      oneSignalService.init().then(() => {
+        // Auto-subscribe if user hasn't been prompted yet
+        const permission = oneSignalService.getPermissionStatus();
+        if (permission === 'default') {
+          // Show prompt after 5 seconds
+          setTimeout(() => {
+            oneSignalService.showPrompt();
+          }, 5000);
+        } else if (permission === 'granted') {
+          // Already granted, just subscribe
+          oneSignalService.subscribe(token);
+        }
+      });
+    }
+  }, [isAuthenticated, token]);
 
   if (isLoading) {
     return (
@@ -58,8 +79,11 @@ const AppContent: React.FC = () => {
           ☰
         </button>
         <h1 className="app-title">Live Translation System</h1>
-        <div className="user-badge">
-          {user?.fullname || user?.username}
+        <div className="app-header-actions">
+          {token && <NotificationCenter token={token} />}
+          <div className="user-badge">
+            {user?.fullname || user?.username}
+          </div>
         </div>
       </div>
       

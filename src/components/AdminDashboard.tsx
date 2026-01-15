@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../store/useAppStore';
+import NotificationComposer from './NotificationComposer';
 import './AdminDashboard.css';
 
 interface User {
@@ -25,6 +26,7 @@ interface Stats {
 
 const AdminDashboard: React.FC = () => {
   const { user: currentUser } = useAppStore();
+  const [activeTab, setActiveTab] = useState<'users' | 'notifications'>('users');
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -170,6 +172,8 @@ const AdminDashboard: React.FC = () => {
 
   const isSuperadmin = currentUser?.role === 'superadmin';
 
+  const token = localStorage.getItem('token') || '';
+
   return (
     <div className="admin-dashboard">
       {message && (
@@ -185,28 +189,47 @@ const AdminDashboard: React.FC = () => {
         </p>
       </div>
 
-      {/* Statistics */}
-      {stats && (
-        <div className="stats-grid">
-          <div className="stat-card">
-            <h3>Total Users</h3>
-            <p className="stat-number">{stats.totalUsers}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Active Users</h3>
-            <p className="stat-number">{stats.activeUsers}</p>
-          </div>
-          {stats.usersByRole.map(role => (
-            <div key={role._id} className="stat-card">
-              <h3>{role._id.charAt(0).toUpperCase() + role._id.slice(1)}s</h3>
-              <p className="stat-number">{role.count}</p>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Tab Navigation */}
+      <div className="admin-tabs">
+        <button 
+          className={`admin-tab ${activeTab === 'users' ? 'active' : ''}`}
+          onClick={() => setActiveTab('users')}
+        >
+          👥 User Management
+        </button>
+        <button 
+          className={`admin-tab ${activeTab === 'notifications' ? 'active' : ''}`}
+          onClick={() => setActiveTab('notifications')}
+        >
+          📢 Send Notifications
+        </button>
+      </div>
 
-      {/* Users Table */}
-      <div className="users-section">
+      {/* Users Tab */}
+      {activeTab === 'users' && (
+        <>
+          {/* Statistics */}
+          {stats && (
+            <div className="stats-grid">
+              <div className="stat-card">
+                <h3>Total Users</h3>
+                <p className="stat-number">{stats.totalUsers}</p>
+              </div>
+              <div className="stat-card">
+                <h3>Active Users</h3>
+                <p className="stat-number">{stats.activeUsers}</p>
+              </div>
+              {stats.usersByRole.map(role => (
+                <div key={role._id} className="stat-card">
+                  <h3>{role._id.charAt(0).toUpperCase() + role._id.slice(1)}s</h3>
+                  <p className="stat-number">{role.count}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Users Table */}
+          <div className="users-section">
         <div className="section-header">
           <h2>👥 Users Management</h2>
           <div className="search-container">
@@ -297,6 +320,13 @@ const AdminDashboard: React.FC = () => {
         </div>
         )}
       </div>
+        </>
+      )}
+
+      {/* Notifications Tab */}
+      {activeTab === 'notifications' && (
+        <NotificationComposer token={token} />
+      )}
     </div>
   );
 };

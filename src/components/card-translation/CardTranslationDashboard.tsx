@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import OnlineDesigners from './OnlineDesigners';
 import CardScriptsList from './CardScriptsList';
 import ApiKeyManagement from './ApiKeyManagement';
+import CepInstallation from './CepInstallation';
 import './CardTranslationDashboard.css';
 
 interface CardTranslationDashboardProps {
@@ -16,7 +17,7 @@ interface CardTranslationDashboardProps {
 }
 
 const CardTranslationDashboard: React.FC<CardTranslationDashboardProps> = ({ token, userRole }) => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'scripts' | 'apikey' | 'designers'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'scripts' | 'apikey' | 'designers' | 'install'>('dashboard');
 
   const isAdmin = userRole === 'admin' || userRole === 'superadmin';
   const isDesigner = userRole === 'designer';
@@ -44,6 +45,12 @@ const CardTranslationDashboard: React.FC<CardTranslationDashboardProps> = ({ tok
           onClick={() => setActiveTab('scripts')}
         >
           📄 Card Scripts
+        </button>
+        <button
+          className={`tab ${activeTab === 'install' ? 'active' : ''}`}
+          onClick={() => setActiveTab('install')}
+        >
+          📥 Install CEP
         </button>
         {(isAdmin || isDesigner) && (
           <button
@@ -159,26 +166,6 @@ const CardTranslationDashboard: React.FC<CardTranslationDashboardProps> = ({ tok
               </div>
             )}
 
-            <div className="documentation-links">
-              <h3>📚 Documentation</h3>
-              <ul>
-                <li>
-                  <a href="/CARD_TRANSLATION_QUICKSTART.md" target="_blank">
-                    Quick Start Guide
-                  </a>
-                </li>
-                <li>
-                  <a href="/CARD_TRANSLATION_COMPLETE.md" target="_blank">
-                    Complete Implementation Details
-                  </a>
-                </li>
-                <li>
-                  <a href="/card-translation-cep/build/README.md" target="_blank">
-                    CEP Panel Build Instructions
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
         )}
 
@@ -188,6 +175,10 @@ const CardTranslationDashboard: React.FC<CardTranslationDashboardProps> = ({ tok
 
         {activeTab === 'scripts' && (
           <CardScriptsList token={token} userRole={userRole} />
+        )}
+
+        {activeTab === 'install' && (
+          <CepInstallation token={token} />
         )}
 
         {activeTab === 'apikey' && (isAdmin || isDesigner) && (
