@@ -81,8 +81,6 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew ${{ env.GRADLE_TASK }} --no-daemon
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME }}
       
       - name: Extract version info
         id: version
