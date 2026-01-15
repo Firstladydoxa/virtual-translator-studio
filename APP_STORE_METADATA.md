@@ -238,6 +238,7 @@ Location: `screenshots/` directory
 - **Repo:** https://github.com/tniglobal/virtual-translator-studio
 - **Releases:** https://github.com/tniglobal/virtual-translator-studio/releases
 - **Workflow:** `.github/workflows/publish-to-appstore.yml`
+- **Actions:** https://github.com/tniglobal/virtual-translator-studio/actions
 
 ---
 
