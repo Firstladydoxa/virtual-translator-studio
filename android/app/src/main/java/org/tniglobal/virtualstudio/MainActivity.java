@@ -1,4 +1,4 @@
-package org.tniglobal.virtualtranslator;
+package org.tniglobal.virtualstudio;
 
 import com.getcapacitor.BridgeActivity;
 
