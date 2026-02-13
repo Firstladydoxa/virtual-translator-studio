@@ -77,12 +77,83 @@
 
 ---
 
-## 🔧 Installation Steps
+## � Getting the Project from Git Repository
 
-### Step 1: Clone/Navigate to Project Directory
+### For Local Computer (Windows/macOS/Linux)
+
+The project is hosted on GitHub and can be cloned to your local computer for Android Studio development.
+
+#### Step 1: Install Git
+
+If you don't have Git installed:
+
+**Windows:**
+- Download from: https://git-scm.com/download/win
+- Or use: `winget install Git.Git`
+
+**macOS:**
+```bash
+brew install git
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt update
+sudo apt install git
+```
+
+#### Step 2: Clone the Repository
+
+Open a terminal (Command Prompt, PowerShell, or Terminal) on your local computer:
 
 ```bash
+# Navigate to where you want the project
+cd ~/Documents  # or C:\Users\YourName\Documents on Windows
+
+# Clone the repository
+git clone https://github.com/Firstladydoxa/virtual-translator-studio.git
+
+# Navigate into the project
+cd virtual-translator-studio
+```
+
+**Repository URL:** `https://github.com/Firstladydoxa/virtual-translator-studio.git`
+
+#### Step 3: Verify Project Structure
+
+After cloning, verify the structure:
+
+```bash
+ls -la  # Linux/macOS
+dir     # Windows
+```
+
+You should see:
+```
+├── android/                    # Android native project
+├── src/                        # React source code
+├── public/                     # Static assets
+├── package.json                # Dependencies
+├── capacitor.config.ts         # Capacitor config
+├── ANDROID_STUDIO_DEPLOYMENT_GUIDE.md
+└── build-android.sh
+```
+
+---
+
+## 🔧 Installation Steps
+
+### Step 1: Navigate to Project Directory
+
+**On Server (if already cloned):**
+```bash
 cd /home/tniglobal/public_html/webrtc/browser-based-translation/frontend-react
+```
+
+**On Local Computer (after cloning from Git):**
+```bash
+cd ~/Documents/virtual-translator-studio  # Linux/macOS
+cd C:\Users\YourName\Documents\virtual-translator-studio  # Windows
 ```
 
 ### Step 2: Install Node Dependencies
@@ -198,19 +269,42 @@ gradlew.bat assembleDebug
 
 ### Step 1: Launch Android Studio
 
-Open Android Studio on your laptop.
+Open Android Studio on your local computer.
 
 ### Step 2: Open Android Project
 
-**Option A: Using Capacitor CLI**
+**Option A: Using Capacitor CLI (From Terminal)**
 ```bash
+# Navigate to project directory first
+cd ~/Documents/virtual-translator-studio  # Your cloned directory
+
+# Then open in Android Studio
 npm run cap:open:android
 ```
 
-**Option B: Manual Open**
-1. Click "Open an Existing Project"
-2. Navigate to: `/home/tniglobal/public_html/webrtc/browser-based-translation/frontend-react/android`
-3. Click "OK"
+**Option B: Manual Open in Android Studio (Recommended for Local)**
+1. Launch Android Studio
+2. Click **"Open"** (or **File → Open**)
+3. Navigate to your cloned project's Android folder:
+   - **Windows:** `C:\Users\YourName\Documents\virtual-translator-studio\android`
+   - **macOS:** `/Users/YourName/Documents/virtual-translator-studio/android`
+   - **Linux:** `/home/YourName/Documents/virtual-translator-studio/android`
+4. Select the **`android`** folder (not the root project folder)
+5. Click **"OK"**
+
+**Option C: Import from Version Control (Alternative)**
+1. In Android Studio: **File → New → Project from Version Control**
+2. Enter repository URL: `https://github.com/Firstladydoxa/virtual-translator-studio.git`
+3. Choose local directory
+4. Click "Clone"
+5. After cloning, navigate to the `android` subfolder and open it
+
+**Note for Server Users:**
+```bash
+# On server
+cd /home/tniglobal/public_html/webrtc/browser-based-translation/frontend-react
+npm run cap:open:android
+```
 
 ### Step 3: Wait for Gradle Sync
 
@@ -634,6 +728,105 @@ Before distributing your APK:
 - [ ] APK is signed with release keystore (for production)
 - [ ] APK size is reasonable (<50 MB)
 - [ ] Release APK is copied to `release/` folder with proper naming
+
+---
+
+## 💻 Complete Workflow for Local Computer
+
+This is the complete step-by-step process to get the project from GitHub and open it in Android Studio on your local Windows/macOS/Linux computer:
+
+### 1️⃣ Clone from GitHub
+
+```bash
+# Open Terminal (macOS/Linux) or Command Prompt/PowerShell (Windows)
+cd ~/Documents  # or wherever you want the project
+
+# Clone the repository
+git clone https://github.com/Firstladydoxa/virtual-translator-studio.git
+
+# Navigate into the project
+cd virtual-translator-studio
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+# Install Node.js dependencies
+npm install
+```
+
+**Note:** This will take 2-5 minutes depending on your internet speed.
+
+### 3️⃣ Build the React App
+
+```bash
+# Create production build
+npm run build
+```
+
+This creates the `build/` directory with optimized web assets.
+
+### 4️⃣ Sync with Android
+
+```bash
+# Copy web assets to Android project
+npx cap sync android
+```
+
+This copies the build to `android/app/src/main/assets/public/`
+
+### 5️⃣ Open in Android Studio
+
+**Method A: Using npm script (easier)**
+```bash
+npm run android:studio
+```
+
+**Method B: Manual opening**
+1. Launch Android Studio
+2. Click **File → Open**
+3. Navigate to: `~/Documents/virtual-translator-studio/android`
+4. Click **OK**
+
+### 6️⃣ Wait for Gradle Sync
+
+Android Studio will download dependencies (first time takes 5-10 minutes).
+
+### 7️⃣ Connect Android Device
+
+1. Enable Developer Options on your Android phone
+2. Enable USB Debugging
+3. Connect via USB
+4. Click the **Run** button (▶️) in Android Studio
+5. Select your device
+6. App will install and launch!
+
+### 🔄 After Making Code Changes
+
+When you update React code:
+
+```bash
+# Rebuild and sync
+npm run build
+npx cap sync android
+
+# Or use the combined script
+npm run android:build
+```
+
+Then click **Run** in Android Studio again.
+
+### 📥 Pulling Latest Updates
+
+To get the latest changes from the server:
+
+```bash
+cd ~/Documents/virtual-translator-studio
+git pull origin main
+npm install  # In case dependencies changed
+npm run build
+npx cap sync android
+```
 
 ---
 
