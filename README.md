@@ -1,46 +1,190 @@
-# Getting Started with Create React App
+# Loveworld Translators Virtual Studio
+## Mobile Application - Version 1.0.0
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A real-time translation studio application built with React and Capacitor for Android mobile deployment.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📱 About This App
 
-### `npm start`
+The **Loveworld Translators Virtual Studio** is a mobile application that enables translators to:
+- 🎙️ Provide real-time translation services
+- 📡 Stream translations to viewers
+- 🔐 Secure authentication system
+- 💬 Real-time WebRTC communication
+- 🔔 Push notifications support
+- 📊 Translation management dashboard
 
-Runs the app in the development mode.\
+---
+
+## 🚀 Quick Start Guides
+
+Choose the guide based on where you're working:
+
+### 📥 **For Local Computer (Windows/macOS/Linux)**
+**→ [LOCAL_COMPUTER_SETUP.md](LOCAL_COMPUTER_SETUP.md)** ⭐ **START HERE**
+
+Step-by-step guide to:
+- Clone from GitHub
+- Install dependencies
+- Build the app
+- Open in Android Studio on your laptop
+
+**This is what you need if you want to develop on your local computer!**
+
+---
+
+### 📖 **Complete Documentation**
+**→ [ANDROID_STUDIO_DEPLOYMENT_GUIDE.md](ANDROID_STUDIO_DEPLOYMENT_GUIDE.md)**
+
+Comprehensive guide covering:
+- Prerequisites and system requirements
+- Detailed installation steps
+- Building APK files
+- Testing on devices/emulators
+- Creating release builds
+- Troubleshooting common issues
+
+---
+
+### 📦 **Release Information**
+**→ [release/README.md](release/README.md)**
+
+Information about:
+- Current release builds
+- APK file details
+- Version history
+- Installation instructions
+
+---
+
+## ⚡ Quick Commands
+
+### For Local Computer Development
+
+\`\`\`bash
+# Clone the repository
+git clone https://github.com/Firstladydoxa/virtual-translator-studio.git
+cd virtual-translator-studio
+
+# Install dependencies
+npm install
+
+# Build and open in Android Studio
+npm run android:studio
+\`\`\`
+
+### For Server Development
+
+\`\`\`bash
+# Navigate to project
+cd /home/tniglobal/public_html/webrtc/browser-based-translation/frontend-react
+
+# Build and sync
+npm run android:build
+
+# Open in Android Studio
+npm run cap:open:android
+\`\`\`
+
+---
+
+## 📋 Available Scripts
+
+### Mobile Development Scripts
+
+#### \`npm run android:studio\`
+Builds the React app, syncs with Android, and opens Android Studio.
+**Use this to start developing on Android!**
+
+#### \`npm run android:build\`
+Builds the React app and syncs with the Android project.
+
+#### \`npm run android:run\`
+Builds, syncs, and runs the app on a connected Android device/emulator.
+
+#### \`npm run cap:sync\`
+Copies web assets and syncs Capacitor plugins to all platforms.
+
+#### \`npm run cap:open:android\`
+Opens the Android project in Android Studio.
+
+### Standard React Scripts
+
+#### \`npm start\`
+Runs the app in development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### \`npm test\`
+Launches the test runner in interactive watch mode.
 
-### `npm test`
+#### \`npm run build\`
+Builds the app for production to the \`build/\` folder.
+Creates an optimized production build ready for mobile deployment.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**After building, always run \`npm run cap:sync\` to update the mobile project!**
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🏗️ Project Structure
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+\`\`\`
+frontend-react/
+├── android/                    # Android native project (open in Android Studio)
+├── src/                        # React source code
+│   ├── components/            # React components
+│   ├── services/              # API and service layers
+│   └── stores/                # State management (Zustand)
+├── public/                     # Static assets
+├── build/                      # Production build output
+├── release/                    # Built APK files
+├── capacitor.config.ts         # Capacitor configuration
+├── package.json                # Dependencies and scripts
+├── LOCAL_COMPUTER_SETUP.md     # Quick start for local computer
+└── ANDROID_STUDIO_DEPLOYMENT_GUIDE.md  # Full documentation
+\`\`\`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🔧 Technologies Used
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **React 19** - UI framework
+- **TypeScript** - Type safety
+- **Capacitor 8** - Native mobile wrapper
+- **Zustand** - State management
+- **Socket.io Client** - Real-time communication
+- **MediaSoup Client** - WebRTC for streaming
+- **Axios** - HTTP client
+- **HLS.js** - Video streaming
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 📊 App Details
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- **App Name:** Loveworld Translators Virtual Studio
+- **Package ID:** org.tniglobal.virtualstudio
+- **Version:** 1.0.0
+- **Build:** 1
+- **Min Android:** 6.0 (API 23)
+- **Target Android:** 15 (API 35)
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🔗 Repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**GitHub:** https://github.com/Firstladydoxa/virtual-translator-studio.git
+
+---
+
+## 📖 Learn More
+
+- [Create React App Documentation](https://facebook.github.io/create-react-app/docs/getting-started)
+- [React Documentation](https://react.dev/)
+- [Capacitor Documentation](https://capacitorjs.com/docs)
+- [Android Studio Guide](https://developer.android.com/studio/intro)
+
+---
+
+**Version:** 1.0.0  
+**Last Updated:** February 13, 2026  
+**Maintained by:** TNI Global Development Team
