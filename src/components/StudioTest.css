@@ -249,6 +249,16 @@
   font-size: 12px;
   font-weight: bold;
   color: #666;
+  margin-top: 8px;
+}
+
+/* Mobile: Push volume labels below volume text to prevent overflow */
+@media (max-width: 768px) {
+  .volume-label {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+  }
 }
 
 .translation-controls {

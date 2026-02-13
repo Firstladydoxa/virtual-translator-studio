@@ -1,11 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as mediasoupClient from 'mediasoup-client';
 import { Device, Transport, Consumer } from 'mediasoup-client/lib/types';
+import { Capacitor } from '@capacitor/core';
 import './WebRTCPlayer.css';
 
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3001'
-  : 'https://ministryprogs.tniglobal.org';
+// Platform-aware API URL detection (same pattern as other components)
+const getApiUrl = () => {
+  // Check if running as native Capacitor app
+  if (Capacitor.isNativePlatform()) {
+    return 'https://ministryprogs.tniglobal.org';
+  }
+  
+  // Web: use hostname detection for local dev
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3001'
+    : 'https://ministryprogs.tniglobal.org';
+};
+
+const API_URL = getApiUrl();
 
 interface WebRTCPlayerProps {
   producerUserId: string;
