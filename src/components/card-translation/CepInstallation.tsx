@@ -5,6 +5,7 @@
 // ========================================
 
 import React, { useState } from 'react';
+import { Capacitor } from '@capacitor/core';
 import './CepInstallation.css';
 
 interface CepInstallationProps {
@@ -14,9 +15,11 @@ interface CepInstallationProps {
 const CepInstallation: React.FC<CepInstallationProps> = ({ token }) => {
   const [downloadStatus, setDownloadStatus] = useState<string | null>(null);
 
-  const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3001'
-    : 'https://ministryprogs.tniglobal.org';
+  const API_URL = Capacitor.isNativePlatform()
+    ? 'https://ministryprogs.tniglobal.org'
+    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3001'
+      : 'https://ministryprogs.tniglobal.org');
 
   const handleDownload = () => {
     setDownloadStatus('Preparing download...');

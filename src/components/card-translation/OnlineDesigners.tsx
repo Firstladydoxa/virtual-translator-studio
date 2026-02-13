@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { Capacitor } from '@capacitor/core';
 import './OnlineDesigners.css';
 
 interface Designer {
@@ -30,9 +31,11 @@ const OnlineDesigners: React.FC<OnlineDesignersProps> = ({ token }) => {
   const [message, setMessage] = useState<string | null>(null);
   const [messageType, setMessageType] = useState<'success' | 'error' | 'info'>('info');
 
-  const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3001'
-    : 'https://ministryprogs.tniglobal.org';
+  const API_URL = Capacitor.isNativePlatform()
+    ? 'https://ministryprogs.tniglobal.org'
+    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3001'
+      : 'https://ministryprogs.tniglobal.org');
 
   // Fetch online designers
   const fetchDesigners = async () => {

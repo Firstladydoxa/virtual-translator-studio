@@ -3,6 +3,8 @@
 // Initialize and manage OneSignal SDK
 // ========================================
 
+import { Capacitor } from '@capacitor/core';
+
 declare global {
   interface Window {
     OneSignal: any;
@@ -11,9 +13,11 @@ declare global {
 
 const ONESIGNAL_APP_ID = '60e31ffd-52a9-416d-b164-80a302ac80bd';
 
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3001'
-  : 'https://ministryprogs.tniglobal.org';
+const API_URL = Capacitor.isNativePlatform()
+  ? 'https://ministryprogs.tniglobal.org'
+  : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3001'
+    : 'https://ministryprogs.tniglobal.org');
 
 class OneSignalService {
   private initialized = false;

@@ -1,10 +1,13 @@
 import * as mediasoupClient from 'mediasoup-client';
 import { Device } from 'mediasoup-client';
 import { Transport, Producer } from 'mediasoup-client/lib/types';
+import { Capacitor } from '@capacitor/core';
 
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3001'
-  : 'https://ministryprogs.tniglobal.org';
+const API_URL = Capacitor.isNativePlatform()
+  ? 'https://ministryprogs.tniglobal.org'
+  : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3001'
+    : 'https://ministryprogs.tniglobal.org');
 
 class WebRTCService {
   private device: Device | null = null;

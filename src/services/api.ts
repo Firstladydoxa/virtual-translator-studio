@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Capacitor } from '@capacitor/core';
 import {
   LoginRequest,
   LoginResponse,
@@ -7,9 +8,14 @@ import {
 } from '../types';
 
 const getApiUrl = (): string => {
+  // If running on mobile (Capacitor native platform), always use production
+  if (Capacitor.isNativePlatform()) {
+    return 'https://ministryprogs.tniglobal.org';
+  }
+  
   const hostname = window.location.hostname;
   
-  // Development
+  // Development (web browser)
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:3001';
   }

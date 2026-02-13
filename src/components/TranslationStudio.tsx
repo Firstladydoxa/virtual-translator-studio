@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Capacitor } from '@capacitor/core';
 import { useAppStore } from '../store/useAppStore';
 import VideoPlayer from './VideoPlayer';
 import AudioControls from './AudioControls';
@@ -126,11 +127,19 @@ const TranslationStudio: React.FC = () => {
 
   const connectWebSocket = useCallback((): Promise<void> => {
     return new Promise((resolve, reject) => {
-      // Use wss:// for HTTPS, ws:// for local development
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'ws://localhost:3001'
-        : `${protocol}//ministryprogs.tniglobal.org`;
+      // Detect if running on mobile (Capacitor native platform)
+      let apiUrl: string;
+      if (Capacitor.isNativePlatform()) {
+        // Always use secure WebSocket on mobile
+        apiUrl = 'wss://ministryprogs.tniglobal.org';
+      } else if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // Local development
+        apiUrl = 'ws://localhost:3001';
+      } else {
+        // Production web
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        apiUrl = `${protocol}//ministryprogs.tniglobal.org`;
+      }
 
       // Get token from store
       const { token } = useAppStore.getState();
