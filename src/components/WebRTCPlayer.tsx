@@ -109,7 +109,7 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
       });
 
       if (!consumers || consumers.length === 0) {
-        throw new Error('No active stream from this translator');
+        throw new Error('Stream starting, please wait...');
       }
 
       console.log(`✅ Got ${consumers.length} consumers`);
@@ -243,7 +243,16 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
         stack: error.stack,
         producerUserId
       });
-      setError(error.message || 'Failed to connect to stream');
+      
+      // Provide user-friendly error messages
+      let userMessage = error.message || 'Connection issue';
+      if (userMessage.includes('Stream starting') || userMessage.includes('No active stream')) {
+        userMessage = '⏳ Waiting for stream to start... (10-30 seconds)';
+      } else if (userMessage.includes('Failed to connect') || userMessage.includes('Request failed')) {
+        userMessage = 'Connection in progress, please wait...';
+      }
+      
+      setError(userMessage);
       setIsConnected(false);
     }
   };

@@ -720,32 +720,6 @@ const StudioTest: React.FC = () => {
           </div>
         )}
         <div className="controls-section">
-          {/* Automatic Time Tracking Info - Moved to top for visibility */}
-          <div className="time-tracking-controls">
-            <h3>⏱️ Automatic Time Tracking</h3>
-            <div className="tracking-status-info">
-              <span className={`status-badge status-ready`}>
-                ✅ Enabled
-              </span>
-            </div>
-            
-            <div className="tracking-info">
-              <p style={{ fontSize: '14px', color: '#333', marginTop: '10px', lineHeight: '1.6' }}>
-                ⚡ <strong>Smart Automatic Tracking:</strong> Your translation time is automatically tracked when you click "Start Translating". 
-                The system is smart enough to:
-              </p>
-              <ul style={{ fontSize: '13px', color: '#666', marginTop: '8px', paddingLeft: '20px' }}>
-                <li>✅ Validate you're within the program schedule (±1 hour grace period)</li>
-                <li>✅ Start tracking when you begin translating</li>
-                <li>✅ Stop tracking when you end your session</li>
-                <li>✅ Calculate your compensation automatically ($5/hour, 25% to translator)</li>
-              </ul>
-              <p style={{ fontSize: '12px', color: '#007bff', marginTop: '12px', fontStyle: 'italic' }}>
-                💰 No manual clocking needed - just start translating and the system handles everything!
-              </p>
-            </div>
-          </div>
-
           {/* Audio Mixing Controls */}
           <div className="audio-mixer-section">
             <h3>🎚️ Audio Mixing Controls</h3>
@@ -807,8 +781,8 @@ const StudioTest: React.FC = () => {
                   color: 'white'
                 }}>
                   {sourceVolume === 0 ? 'Muted' : 
-                   sourceVolume < 0.3 ? 'Low (Preaching)' :
-                   sourceVolume < 0.7 ? 'Medium (Balanced)' : 'High (Singing)'}
+                   sourceVolume < 0.3 ? 'Low' :
+                   sourceVolume < 0.7 ? 'Medium' : 'High'}
                 </span>
               </div>
 
@@ -844,8 +818,8 @@ const StudioTest: React.FC = () => {
                   color: 'white'
                 }}>
                   {translatorVolume === 0 ? 'Muted' : 
-                   translatorVolume < 0.3 ? 'Low (Singing)' :
-                   translatorVolume < 0.7 ? 'Medium (Balanced)' : 'High (Preaching)'}
+                   translatorVolume < 0.3 ? 'Low' :
+                   translatorVolume < 0.7 ? 'Medium' : 'High'}
                 </span>
               </div>
 
@@ -921,6 +895,32 @@ const StudioTest: React.FC = () => {
               Status: {isTranslating ? 
                 (outputStreamAvailable ? 'Translation Active - Stream Live ✓' : 'Starting Stream...') : 
                 'Ready to Translate'}
+            </div>
+          </div>
+
+          {/* Automatic Time Tracking Info - Moved to bottom */}
+          <div className="time-tracking-controls">
+            <h3>⏱️ Automatic Time Tracking</h3>
+            <div className="tracking-status-info">
+              <span className={`status-badge status-ready`}>
+                ✅ Enabled
+              </span>
+            </div>
+            
+            <div className="tracking-info">
+              <p style={{ fontSize: '14px', color: '#333', marginTop: '10px', lineHeight: '1.6' }}>
+                ⚡ <strong>Smart Automatic Tracking:</strong> Your translation time is automatically tracked when you click "Start Translating". 
+                The system is smart enough to:
+              </p>
+              <ul style={{ fontSize: '13px', color: '#666', marginTop: '8px', paddingLeft: '20px' }}>
+                <li>✅ Validate you're within the program schedule (±1 hour grace period)</li>
+                <li>✅ Start tracking when you begin translating</li>
+                <li>✅ Stop tracking when you end your session</li>
+                <li>✅ Calculate your compensation automatically ($5/hour, 25% to translator)</li>
+              </ul>
+              <p style={{ fontSize: '12px', color: '#007bff', marginTop: '12px', fontStyle: 'italic' }}>
+                💰 No manual clocking needed - just start translating and the system handles everything!
+              </p>
             </div>
           </div>
         </div>
