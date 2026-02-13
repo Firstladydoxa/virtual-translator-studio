@@ -10,7 +10,7 @@ env:
   APP_CATEGORY: "Productivity"
   APP_SHORT_DESC: "Professional real-time translation studio with live streaming support"
   APP_FULL_DESC: |
-    Virtual Translator Studio - Professional Translation Platform
+    Loveworld Translators Virtual Studio - Professional Translation Platform
     
     Transform your translation workflow with our cutting-edge mobile app designed specifically for professional translators.
     
@@ -127,7 +127,7 @@ jobs:
         with:
           files: ./android/${{ steps.apk.outputs.apk_path }}
           body: |
-            ## 📱 Virtual Translator Studio v${{ steps.version.outputs.version_name }}
+            ## 📱 Loveworld Translators Virtual Studio v${{ steps.version.outputs.version_name }}
             
             **Package:** ${{ steps.version.outputs.package_name }}
             **Version Code:** ${{ steps.version.outputs.version_code }}

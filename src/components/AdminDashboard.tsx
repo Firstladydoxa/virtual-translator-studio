@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import NotificationComposer from './NotificationComposer';
+import AdminTimeTracking from './AdminTimeTracking';
 import './AdminDashboard.css';
 
 interface User {
@@ -26,7 +27,7 @@ interface Stats {
 
 const AdminDashboard: React.FC = () => {
   const { user: currentUser } = useAppStore();
-  const [activeTab, setActiveTab] = useState<'users' | 'notifications'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'notifications' | 'timetracking'>('users');
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -198,12 +199,23 @@ const AdminDashboard: React.FC = () => {
           👥 User Management
         </button>
         <button 
+          className={`admin-tab ${activeTab === 'timetracking' ? 'active' : ''}`}
+          onClick={() => setActiveTab('timetracking')}
+        >
+          ⏱️ Time Tracking
+        </button>
+        <button 
           className={`admin-tab ${activeTab === 'notifications' ? 'active' : ''}`}
           onClick={() => setActiveTab('notifications')}
         >
           📢 Send Notifications
         </button>
       </div>
+
+      {/* Time Tracking Tab */}
+      {activeTab === 'timetracking' && (
+        <AdminTimeTracking />
+      )}
 
       {/* Users Tab */}
       {activeTab === 'users' && (

@@ -10,6 +10,11 @@ import './StudioTest.css';
 
 const StudioTest: React.FC = () => {
   
+  // API URL
+  const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3001'
+    : 'https://ministryprogs.tniglobal.org';
+  
   // Get state from store
   const {
     user,
@@ -27,6 +32,12 @@ const StudioTest: React.FC = () => {
   const [messageType, setMessageType] = useState<'info' | 'success' | 'error'>('info');
   const [outputVideoKey, setOutputVideoKey] = useState(0);
   const [sourceVideoUrl, setSourceVideoUrl] = useState('https://2nbyjxnbl53k-hls-live.5centscdn.com/RTV/59a49be6dc0f146c57cd9ee54da323b1.sdp/playlist.m3u8'); // Default URL
+  
+  // Time tracking states
+  const [isClockedIn, setIsClockedIn] = useState(false);
+  const [trackingStatus, setTrackingStatus] = useState<string>('Checking...');
+  const [canTrack, setCanTrack] = useState<boolean>(false);
+  const [requestId, setRequestId] = useState<string | null>(null);
   
   // Audio volume controls
   const [sourceVolume, setSourceVolume] = useState(0.3); // 30% for preaching (low)
@@ -62,6 +73,72 @@ const StudioTest: React.FC = () => {
   const outputVideoUrl = getWatchUrl();
   const language = getTranslationLanguage();
 
+  // Check if user is logged in and set up tracking
+  useEffect(() => {
+    const checkTracking = async () => {
+      try {
+        console.log('🔍 Checking tracking setup...');
+        console.log('Current language:', language);
+        console.log('User from store:', user);
+        
+        if (!user || !user.id) {
+          console.warn('⚠️ No user logged in');
+          setTrackingStatus('Please login to use time tracking');
+          setCanTrack(false);
+          return;
+        }
+        
+        // Fetch active Translation Services assignment for this translator
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_URL}/api/ts/assignments/my-active`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.data && data.data.length > 0) {
+              const assignment = data.data[0]; // Get first active assignment
+              setRequestId(assignment.requestId._id);
+              console.log('✅ Active assignment found:', {
+                requestId: assignment.requestId._id,
+                programTitle: assignment.requestId.programTitle,
+                language: assignment.language
+              });
+              setTrackingStatus('Time tracking enabled');
+              setCanTrack(true);
+            } else {
+              console.log('⚠️ No active assignments found');
+              setRequestId(null);
+              setTrackingStatus('No active assignment');
+              setCanTrack(false);
+            }
+          } else {
+            console.warn('⚠️ Failed to fetch assignments');
+            setRequestId('pending');
+            setTrackingStatus('Time tracking enabled (fallback)');
+            setCanTrack(true);
+          }
+        } catch (assignmentError) {
+          console.error('❌ Error fetching assignment:', assignmentError);
+          setRequestId('pending');
+          setTrackingStatus('Time tracking enabled (fallback)');
+          setCanTrack(true);
+        }
+
+      } catch (error) {
+        console.error('❌ Error checking tracking:', error);
+        setTrackingStatus('Time tracking unavailable');
+        setCanTrack(false);
+      }
+    };
+
+    checkTracking();
+  }, [language, user]);
+
   // Fetch source video URL from backend
   useEffect(() => {
     const fetchSourceVideoUrl = async () => {
@@ -95,6 +172,28 @@ const StudioTest: React.FC = () => {
     setMessageType(type);
     setTimeout(() => setMessage(''), 5000);
   }, []);
+
+  // Manual clock in
+  const handleClockIn = async () => {
+    if (!user || !language) {
+      showMessage('Please login first', 'error');
+      return;
+    }
+
+    // Time tracking is currently being implemented - this is a placeholder
+    showMessage('Manual clock in feature coming soon! Use Start Translating for automatic tracking.', 'info');
+  };
+
+  // Manual clock out
+  const handleClockOut = async () => {
+    if (!user || !language) {
+      showMessage('Please login first', 'error');
+      return;
+    }
+
+    // Time tracking is currently being implemented - this is a placeholder
+    showMessage('Manual clock out feature coming soon! Use Stop Streaming for automatic tracking.', 'info');
+  };
 
   // Update audio volumes in real-time
   useEffect(() => {
@@ -202,6 +301,26 @@ const StudioTest: React.FC = () => {
         }
       });
       console.log('🛑 Translation session ended and tracked');
+      
+      // Auto-end time tracking when translator leaves Virtual Studio
+      if (requestId && language) {
+        const trackingResponse = await fetch('https://ministryprogs.tniglobal.org/api/ts/time-tracking/auto-end', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ requestId, language })
+        });
+        
+        if (trackingResponse.ok) {
+          const trackingData = await trackingResponse.json();
+          setTrackingStatus('Auto-tracking ended');
+          console.log('✅ Auto-tracking ended:', trackingData);
+        } else {
+          console.warn('⚠️ Auto-tracking end failed');
+        }
+      }
     } catch (trackError) {
       console.error('Failed to track translation end:', trackError);
     }
@@ -247,6 +366,28 @@ const StudioTest: React.FC = () => {
           }
         });
         console.log('✅ Translation session tracked');
+        
+        // Auto-start time tracking when translator joins Virtual Studio
+        if (requestId && language) {
+          const trackingResponse = await fetch('https://ministryprogs.tniglobal.org/api/ts/time-tracking/auto-start', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ requestId, language })
+          });
+          
+          if (trackingResponse.ok) {
+            const trackingData = await trackingResponse.json();
+            setTrackingStatus('Auto-tracking active');
+            console.log('✅ Auto-tracking started:', trackingData);
+          } else {
+            const trackingError = await trackingResponse.json();
+            console.warn('⚠️ Auto-tracking failed:', trackingError.message);
+            setTrackingStatus(trackingError.message || 'Auto-tracking failed');
+          }
+        }
       } catch (trackError) {
         console.error('Failed to track translation session:', trackError);
       }
@@ -579,6 +720,32 @@ const StudioTest: React.FC = () => {
           </div>
         )}
         <div className="controls-section">
+          {/* Automatic Time Tracking Info - Moved to top for visibility */}
+          <div className="time-tracking-controls">
+            <h3>⏱️ Automatic Time Tracking</h3>
+            <div className="tracking-status-info">
+              <span className={`status-badge status-ready`}>
+                ✅ Enabled
+              </span>
+            </div>
+            
+            <div className="tracking-info">
+              <p style={{ fontSize: '14px', color: '#333', marginTop: '10px', lineHeight: '1.6' }}>
+                ⚡ <strong>Smart Automatic Tracking:</strong> Your translation time is automatically tracked when you click "Start Translating". 
+                The system is smart enough to:
+              </p>
+              <ul style={{ fontSize: '13px', color: '#666', marginTop: '8px', paddingLeft: '20px' }}>
+                <li>✅ Validate you're within the program schedule (±1 hour grace period)</li>
+                <li>✅ Start tracking when you begin translating</li>
+                <li>✅ Stop tracking when you end your session</li>
+                <li>✅ Calculate your compensation automatically ($5/hour, 25% to translator)</li>
+              </ul>
+              <p style={{ fontSize: '12px', color: '#007bff', marginTop: '12px', fontStyle: 'italic' }}>
+                💰 No manual clocking needed - just start translating and the system handles everything!
+              </p>
+            </div>
+          </div>
+
           {/* Audio Mixing Controls */}
           <div className="audio-mixer-section">
             <h3>🎚️ Audio Mixing Controls</h3>

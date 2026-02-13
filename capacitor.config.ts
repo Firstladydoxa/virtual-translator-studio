@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'org.tniglobal.virtualstudio',
-  appName: 'Virtual Translator Studio',
+  appName: 'Loveworld Translators Virtual Studio',
   webDir: 'build',
   server: {
     androidScheme: 'https',

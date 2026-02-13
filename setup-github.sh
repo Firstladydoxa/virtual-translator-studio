@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Virtual Translator Studio - GitHub Repository Setup Script
+# Loveworld Translators Virtual Studio - GitHub Repository Setup Script
 # This script initializes the GitHub repository and prepares for first deployment
 
 set -e  # Exit on error
 
-echo "🚀 Virtual Translator Studio - GitHub Setup"
+echo "🚀 Loveworld Translators Virtual Studio - GitHub Setup"
 echo "=========================================="
 echo ""
 
