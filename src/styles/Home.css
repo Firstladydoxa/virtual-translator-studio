@@ -1,7 +1,7 @@
 .home-container {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   padding: 20px;
   overflow-y: auto;
 }
@@ -12,11 +12,11 @@
 }
 
 .presentation-page {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 12px;
   padding: 60px;
   margin-bottom: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-xl);
   page-break-after: always;
   min-height: 800px;
   position: relative;
@@ -24,8 +24,8 @@
 
 /* Cover Page */
 .cover-page {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,10 +64,13 @@
 .page-title {
   font-size: 48px;
   font-weight: 700;
-  color: #667eea;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0 0 40px 0;
   padding-bottom: 20px;
-  border-bottom: 4px solid #667eea;
+  border-bottom: 4px solid var(--primary-pink);
 }
 
 /* Content Sections */
@@ -78,32 +81,32 @@
 .content-section h2 {
   font-size: 28px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin: 0 0 20px 0;
 }
 
 .content-section h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary);
   margin: 15px 0 10px 0;
 }
 
 .content-section p {
   font-size: 16px;
   line-height: 1.8;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 15px 0;
 }
 
 .mission-text {
   font-size: 18px;
   line-height: 2;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 400;
   padding: 20px;
-  background: #f8f9ff;
-  border-left: 4px solid #667eea;
+  background: var(--gradient-subtle);
+  border-left: 4px solid var(--primary-pink);
   border-radius: 8px;
 }
 
@@ -116,12 +119,12 @@
 }
 
 .highlight-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   padding: 30px;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
 }
 
 .highlight-icon {
@@ -132,13 +135,13 @@
 .highlight-card h3 {
   font-size: 20px;
   font-weight: 600;
-  color: white;
+  color: var(--text-on-primary);
   margin: 0 0 10px 0;
 }
 
 .highlight-card p {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   margin: 0;
 }
 
@@ -151,16 +154,16 @@
 }
 
 .tech-item {
-  background: #f8f9ff;
+  background: var(--gradient-subtle);
   padding: 20px;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--primary-pink);
   font-size: 14px;
   line-height: 1.6;
 }
 
 .tech-item strong {
-  color: #667eea;
+  color: var(--primary-pink);
   display: block;
   margin-bottom: 5px;
 }
@@ -175,7 +178,7 @@
 .feature-list li {
   font-size: 16px;
   line-height: 2;
-  color: #555;
+  color: var(--text-secondary);
   padding-left: 10px;
   margin-bottom: 8px;
 }
@@ -196,44 +199,44 @@
 .spec-table td:first-child {
   width: 40%;
   font-weight: 500;
-  color: #667eea;
+  color: var(--primary-pink);
 }
 
 .spec-table td:last-child {
-  color: #555;
+  color: var(--text-secondary);
 }
 
 /* Feature Box */
 .feature-box {
-  background: #f8f9ff;
+  background: var(--gradient-subtle);
   padding: 25px;
   border-radius: 8px;
-  border: 2px solid #667eea;
+  border: 2px solid var(--primary-pink);
   margin-top: 15px;
 }
 
 .feature-box p {
   margin-bottom: 10px;
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
 }
 
 /* Step Box */
 .step-box {
   display: flex;
   gap: 20px;
-  background: #f8f9ff;
+  background: var(--gradient-subtle);
   padding: 25px;
   border-radius: 8px;
   margin-bottom: 20px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--primary-pink);
 }
 
 .step-number {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -250,7 +253,7 @@
 .step-content p {
   margin: 0 0 10px 0;
   font-size: 16px;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .step-content ul {
@@ -260,12 +263,12 @@
 
 .step-content ul li {
   margin-bottom: 8px;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .url-text {
-  background: #667eea;
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   padding: 10px 20px;
   border-radius: 6px;
   font-family: monospace;
@@ -302,7 +305,7 @@
 .warning-box p,
 .success-box p {
   margin: 0 0 10px 0;
-  color: #333;
+  color: var(--text-primary);
 }
 
 /* Benefit Grid */
@@ -314,17 +317,18 @@
 }
 
 .benefit-card {
-  background: white;
+  background: var(--bg-primary);
   padding: 30px;
   border-radius: 12px;
   text-align: center;
-  border: 2px solid #667eea;
+  border: 2px solid var(--primary-pink);
   transition: all 0.3s ease;
 }
 
 .benefit-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 10px 25px rgba(233, 30, 99, 0.2);
+  border-color: var(--primary-blue);
 }
 
 .benefit-icon {
@@ -335,20 +339,23 @@
 .benefit-card h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #667eea;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0 0 10px 0;
 }
 
 .benefit-card p {
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 /* Metrics */
 .metric-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   padding: 30px;
   border-radius: 12px;
   text-align: center;
@@ -379,18 +386,21 @@
 .thank-you-content h2 {
   font-size: 48px;
   font-weight: 700;
-  color: #667eea;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0 0 20px 0;
 }
 
 .thank-you-text {
   font-size: 24px;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 50px 0;
 }
 
 .contact-section {
-  background: #f8f9ff;
+  background: var(--gradient-subtle);
   padding: 40px;
   border-radius: 12px;
   margin: 40px 0;
@@ -399,7 +409,10 @@
 .contact-section h3 {
   font-size: 28px;
   font-weight: 600;
-  color: #667eea;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0 0 30px 0;
   text-align: center;
 }
@@ -416,14 +429,14 @@
 
 .contact-item strong {
   font-size: 16px;
-  color: #667eea;
+  color: var(--primary-pink);
   display: block;
   margin-bottom: 8px;
 }
 
 .contact-item p {
   font-size: 15px;
-  color: #555;
+  color: var(--text-secondary);
   margin: 0;
   word-break: break-word;
 }
@@ -435,7 +448,10 @@
 .tagline {
   font-size: 28px;
   font-weight: 600;
-  color: #667eea;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-style: italic;
 }
 

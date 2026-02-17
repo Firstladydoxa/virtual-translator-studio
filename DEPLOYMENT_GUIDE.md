@@ -1,0 +1,258 @@
+# 🚀 Frontend Deployment Guide
+
+## Problem Solved
+**Issue:** Changes made to frontend code weren't reflecting in production after running `npm run build`.
+
+**Root Cause:** 
+- Apache was caching `index.html` with aggressive cache headers (`max-age=31536000`)
+- Even though React generates new JavaScript bundles with content hashes, the cached `index.html` was still referencing old bundles
+- Browsers were never checking for the updated `index.html`
+
+## Solution Implemented
+
+### 1. Created `.htaccess` Configuration
+**Location:** `public/.htaccess` (gets copied to `build/.htaccess` during build)
+
+**What it does:**
+- ✅ Prevents caching of `index.html` (always checks for updates)
+- ✅ Prevents caching of service workers
+- ✅ Properly caches static assets (JS, CSS, images) with content hashes
+- ✅ Enables gzip compression
+- ✅ Configures React Router rewrites
+
+### 2. Created Deployment Script
+**Location:** `deploy.sh`
+
+**Features:**
+- Automated build process
+- Cleans previous build
+- Verifies .htaccess is in place
+- Shows build statistics
+- Provides deployment info
+- Optional local testing
+
+## How to Deploy Changes
+
+### Quick Method
+```bash
+cd /home/tniglobal/public_html/webrtc/browser-based-translation/frontend-react
+./deploy.sh
+```
+
+### Manual Method
+```bash
+cd /home/tniglobal/public_html/webrtc/browser-based-translation/frontend-react
+
+# 1. Build the app
+npm run build
+
+# 2. Verify .htaccess is in build/
+ls -la build/.htaccess
+
+# 3. Changes are now live at https://programs.tniglobal.org
+```
+
+## How Users See Changes
+
+### For New Users
+✅ Changes are visible immediately (no cache)
+
+### For Existing Users
+They need to clear browser cache:
+
+**Hard Refresh:**
+- **Chrome/Edge:** `Ctrl + Shift + R` (Windows/Linux) or `Cmd + Shift + R` (Mac)
+- **Firefox:** `Ctrl + F5` (Windows/Linux) or `Cmd + Shift + R` (Mac)
+- **Safari:** `Cmd + Option + R`
+
+**Or:**
+- Open Developer Tools (F12)
+- Right-click refresh button → "Empty Cache and Hard Reload"
+
+**Or:**
+- Use Incognito/Private mode to test
+
+## Verification
+
+### Check if Changes are Live
+```bash
+# 1. Build timestamp
+ls -l build/index.html
+
+# 2. Check production
+curl -I https://programs.tniglobal.org/index.html | grep "Last-Modified"
+
+# 3. Verify cache headers
+curl -I https://programs.tniglobal.org/index.html | grep "Cache-Control"
+# Should show: Cache-Control: no-cache, no-store, must-revalidate
+```
+
+### Check JavaScript Bundle
+```bash
+# See which bundle is being built
+cat build/index.html | grep -o "main\.[a-z0-9]*\.js"
+
+# Check production
+curl -s https://programs.tniglobal.org/index.html | grep -o "main\.[a-z0-9]*\.js"
+```
+
+## Cache Headers Explained
+
+### Before (Problem)
+```
+index.html:
+  Cache-Control: public, max-age=31536000, immutable
+  Result: Cached for 1 year ❌
+```
+
+### After (Fixed)
+```
+index.html:
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+  Result: Always checks for updates ✅
+
+main.abc123.js (with content hash):
+  Cache-Control: public, max-age=31536000, immutable
+  Result: Cached for 1 year (safe because filename changes) ✅
+```
+
+## Build Process Flow
+
+```
+1. Make changes to code
+   ↓
+2. Run: npm run build
+   ↓
+3. React detects changes
+   ↓
+4. Generates NEW bundle: main.xyz789.js (different hash)
+   ↓
+5. Updates index.html to reference main.xyz789.js
+   ↓
+6. Copies public/.htaccess to build/.htaccess
+   ↓
+7. Browser requests index.html
+   ↓
+8. .htaccess says "don't cache index.html"
+   ↓
+9. Browser gets NEW index.html
+   ↓
+10. Sees main.xyz789.js and loads it
+    ↓
+11. User sees changes! ✅
+```
+
+## Troubleshooting
+
+### Changes still not visible?
+
+1. **Check build timestamp:**
+   ```bash
+   ls -l build/index.html
+   ```
+   Should be recent (within last few minutes)
+
+2. **Verify .htaccess exists:**
+   ```bash
+   ls -la build/.htaccess
+   ```
+
+3. **Check production cache headers:**
+   ```bash
+   curl -I https://programs.tniglobal.org/index.html | grep Cache
+   ```
+   Should show: `no-cache, no-store, must-revalidate`
+
+4. **Clear browser cache completely:**
+   - Chrome Settings → Privacy → Clear browsing data
+   - Select "Cached images and files"
+   - Click "Clear data"
+
+5. **Test in Incognito:**
+   - Open browser in incognito/private mode
+   - Visit https://programs.tniglobal.org
+   - Should see changes immediately
+
+### Build fails?
+
+1. **Check Node/npm versions:**
+   ```bash
+   node --version  # Should be v16+
+   npm --version   # Should be v8+
+   ```
+
+2. **Reinstall dependencies:**
+   ```bash
+   rm -rf node_modules package-lock.json
+   npm install
+   npm run build
+   ```
+
+3. **Check for syntax errors:**
+   - Read build error messages carefully
+   - Fix TypeScript/ESLint errors
+   - Run `npm run build` again
+
+## File Structure
+
+```
+frontend-react/
+├── public/
+│   ├── .htaccess          ← Cache headers config
+│   ├── index.html
+│   └── ...
+├── src/
+│   ├── components/
+│   ├── services/
+│   └── ...
+├── build/                 ← Generated by npm run build
+│   ├── .htaccess          ← Copied from public/
+│   ├── index.html         ← Always fresh (no-cache)
+│   └── static/
+│       ├── js/
+│       │   └── main.abc123.js  ← Cached with hash
+│       └── css/
+│           └── main.xyz456.css ← Cached with hash
+├── deploy.sh              ← One-command deployment
+└── package.json
+```
+
+## Quick Reference Commands
+
+```bash
+# Deploy changes
+./deploy.sh
+
+# Manual build
+npm run build
+
+# Test locally
+npx serve -s build
+
+# Check production
+curl -I https://programs.tniglobal.org/index.html
+
+# View cache headers
+curl -I https://programs.tniglobal.org/index.html | grep Cache
+```
+
+## Best Practices
+
+1. **Always run `npm run build` after making changes**
+2. **Test locally first:** `npx serve -s build`
+3. **Use the deployment script:** `./deploy.sh`
+4. **Verify in incognito mode first** (avoids cache issues)
+5. **Inform users to clear cache after major updates**
+6. **Check build output for errors/warnings**
+
+## Summary
+
+✅ **Problem Fixed:** Changes now reflect immediately in production  
+✅ **Cache Headers:** Properly configured for React SPA  
+✅ **Deployment:** Automated with `deploy.sh` script  
+✅ **Documentation:** Complete guide for future reference  
+
+**Last Updated:** February 17, 2026  
+**Status:** Production Ready

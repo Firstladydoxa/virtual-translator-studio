@@ -171,8 +171,8 @@
 .role-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   border-radius: 12px;
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -244,7 +244,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%);
   color: white;
 }
 
@@ -279,7 +279,7 @@
 
 /* Info Panel */
 .info-panel {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%);
   color: white;
   padding: 2rem;
   border-radius: 12px;

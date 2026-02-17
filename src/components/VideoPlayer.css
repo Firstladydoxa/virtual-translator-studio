@@ -15,8 +15,8 @@
 }
 
 .stream-info {
-  background: rgba(255, 170, 68, 0.2);
-  border: 2px solid #ffaa44;
+  background: var(--color-warning-bg);
+  border: 2px solid var(--color-warning);
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 10px;
@@ -24,7 +24,7 @@
 }
 
 .stream-info p {
-  color: #ffaa44;
+  color: var(--color-warning);
   font-size: 14px;
   margin: 0;
   font-weight: 600;
@@ -41,17 +41,18 @@
 .btn-play {
   margin-top: 10px;
   padding: 10px 20px;
-  background-color: #667eea;
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-play:hover {
-  background-color: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
 }
 
 .source-video {

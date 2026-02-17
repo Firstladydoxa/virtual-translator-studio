@@ -4,13 +4,14 @@
   align-items: center;
   min-height: 100vh;
   padding: 20px;
+  background: var(--gradient-primary);
 }
 
 .auth-card {
-  background: white;
+  background: var(--bg-primary);
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
@@ -19,9 +20,13 @@
 
 .auth-card h2 {
   text-align: center;
-  color: #2c3e50;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 30px;
   font-size: 28px;
+  font-weight: 700;
 }
 
 .auth-form {
@@ -32,38 +37,87 @@
 .auth-form button[type="submit"] {
   width: 100%;
   margin-top: 10px;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
+  border: none;
+  font-weight: 600;
+}
+
+.auth-form button[type="submit"]:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .auth-switch {
   text-align: center;
   margin-top: 20px;
-  color: #7f8c8d;
+  color: var(--text-secondary);
 }
 
 .auth-switch a {
-  color: #667eea;
+  color: var(--primary-pink);
   text-decoration: none;
   font-weight: 600;
 }
 
 .auth-switch a:hover {
+  color: var(--primary-blue);
   text-decoration: underline;
 }
 
 .error-message {
-  background-color: #fee;
-  color: #c00;
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
   padding: 12px;
   border-radius: 6px;
   margin-bottom: 20px;
-  border-left: 4px solid #c00;
+  border-left: 4px solid var(--color-error);
+  font-weight: 500;
 }
 
 .success-message {
-  background-color: #efe;
-  color: #090;
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
   padding: 12px;
   border-radius: 6px;
   margin-bottom: 20px;
-  border-left: 4px solid #090;
+  border-left: 4px solid var(--color-success);
+  font-weight: 500;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .register-form {
+    padding: 30px 20px;
+  }
+
+  .register-form h2 {
+    font-size: 28px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-group input,
+  .form-group select {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .btn-register {
+    padding: 14px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-form {
+    padding: 25px 15px;
+  }
+
+  .register-form h2 {
+    font-size: 24px;
+  }
 }

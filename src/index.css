@@ -1,3 +1,50 @@
+:root {
+  /* Primary Theme Colors - Dark Pink & Royal Blue Gradient */
+  --primary-pink: #E91E63;
+  --primary-pink-dark: #C2185B;
+  --primary-pink-light: #F06292;
+  --primary-blue: #2196F3;
+  --primary-blue-dark: #1565C0;
+  --primary-blue-light: #42A5F5;
+  
+  /* Gradient Backgrounds */
+  --gradient-primary: linear-gradient(135deg, #E91E63 0%, #2196F3 100%);
+  --gradient-primary-reverse: linear-gradient(135deg, #2196F3 0%, #E91E63 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(233, 30, 99, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%);
+  
+  /* Text Colors - High Contrast */
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-tertiary: #6a6a6a;
+  --text-on-primary: #ffffff;
+  --text-on-dark: #ffffff;
+  --text-on-light: #1a1a1a;
+  
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --bg-dark: #1a1a1a;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Status Colors - High Contrast */
+  --color-success: #2e7d32;
+  --color-success-bg: #c8e6c9;
+  --color-warning: #f57c00;
+  --color-warning-bg: #ffe0b2;
+  --color-error: #d32f2f;
+  --color-error-bg: #ffcdd2;
+  --color-info: #1976d2;
+  --color-info-bg: #bbdefb;
+  
+  /* Border & Shadow */
+  --border-color: #dee2e6;
+  --border-color-light: #e9ecef;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -11,6 +58,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 code {

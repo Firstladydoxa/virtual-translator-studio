@@ -46,7 +46,10 @@
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #667eea;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 0.25rem;
 }
 
@@ -95,8 +98,8 @@
 }
 
 .scripts-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
 }
 
 .scripts-table th {
@@ -154,8 +157,8 @@
 
 .btn-view {
   padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   border: none;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -166,7 +169,7 @@
 
 .btn-view:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
 }
 
 /* Modal */
@@ -202,8 +205,8 @@
   align-items: center;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid #e0e0e0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
 }
 
 .modal-header h3 {
@@ -266,12 +269,12 @@
   padding: 1rem;
   background: #f9f9f9;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--primary-pink);
 }
 
 .layer-key {
   font-weight: 600;
-  color: #667eea;
+  color: var(--primary-pink);
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }

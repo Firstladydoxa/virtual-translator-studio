@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { languageService } from '../services/api';
 import { Language } from '../types';
+import { countries } from '../data/countries';
 import './RegisterForm.css';
 
 interface RegisterFormProps {
@@ -17,9 +18,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
     password: ''
   });
   const [languages, setLanguages] = useState<Language[]>([]);
-  const [filteredLanguages, setFilteredLanguages] = useState<Language[]>([]);
-  const [languageSearch, setLanguageSearch] = useState('');
-  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,73 +31,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
     try {
       const langs = await languageService.getLanguages();
       setLanguages(langs);
-      setFilteredLanguages(langs);
     } catch (err) {
       console.error('Failed to load languages:', err);
       setError('Failed to load language options');
     }
-  };
-
-  const handleLanguageSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
-    setLanguageSearch(searchTerm);
-    
-    if (searchTerm.trim() === '') {
-      setFilteredLanguages([]);
-      setShowLanguageDropdown(false);
-    } else if (searchTerm.trim().length < 2) {
-      // Require at least 2 characters to show results
-      setFilteredLanguages([]);
-      setShowLanguageDropdown(false);
-    } else {
-      const searchLower = searchTerm.toLowerCase().trim();
-      const searchTokens = searchLower.split(/\s+/).filter(Boolean);
-
-      // Stricter filter: every search token must match start-of-word or start-of-value
-      const filtered = languages.filter(lang => {
-        const labelLower = lang.label.toLowerCase();
-        const valueLower = lang.value.toLowerCase();
-
-        // Normalize label: remove leading symbols, split into words
-        const cleanLabel = labelLower.replace(/^[^a-z0-9]+/, '');
-        const labelWords = cleanLabel.split(/[\s\-_']+/).map(word => word.replace(/^[^a-z0-9]+/, ''));
-        const valueWords = valueLower.split('_');
-
-        // Each search token must match start of some word in label or value
-        return searchTokens.every(token => {
-          if (!token) return true;
-          const matchesLabel = labelWords.some(word => word.startsWith(token));
-          const matchesValue = valueLower.startsWith(token) || valueWords.some(word => word.startsWith(token));
-          return matchesLabel || matchesValue;
-        });
-      });
-
-      setFilteredLanguages(filtered);
-      setShowLanguageDropdown(true);
-    }
-  };
-
-  const handleLanguageSelect = (lang: Language) => {
-    setFormData({
-      ...formData,
-      language: lang.value
-    });
-    setLanguageSearch(lang.label);
-    setShowLanguageDropdown(false);
-  };
-
-  const handleLanguageInputFocus = () => {
-    // Only show dropdown if there's a search term with results
-    if (languageSearch.trim().length >= 2 && filteredLanguages.length > 0) {
-      setShowLanguageDropdown(true);
-    }
-  };
-
-  const handleLanguageInputBlur = () => {
-    // Delay to allow click on dropdown item
-    setTimeout(() => {
-      setShowLanguageDropdown(false);
-    }, 200);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -178,55 +113,40 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
 
           <div className="form-group">
             <label htmlFor="country">Country</label>
-            <input
-              type="text"
+            <select
               id="country"
               name="country"
               value={formData.country}
               onChange={handleChange}
-              placeholder="Enter your country"
               required
               disabled={loading}
-            />
+            >
+              <option value="">Select your country</option>
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">
             <label htmlFor="language">Translation Language</label>
-            <div className="language-search-container">
-              <input
-                type="text"
-                id="language"
-                name="language-search"
-                value={languageSearch}
-                onChange={handleLanguageSearch}
-                onFocus={handleLanguageInputFocus}
-                onBlur={handleLanguageInputBlur}
-                placeholder="Search for a language... (min 2 characters)"
-                required={!formData.language}
-                disabled={loading}
-                autoComplete="off"
-              />
-              {showLanguageDropdown && filteredLanguages.length > 0 && languageSearch.trim().length >= 2 && (
-                <div className="language-dropdown">
-                  {filteredLanguages.map((lang) => (
-                    <div
-                      key={lang.value}
-                      className={`language-option ${formData.language === lang.value ? 'selected' : ''}`}
-                      onClick={() => handleLanguageSelect(lang)}
-                    >
-                      {lang.label}
-                    </div>
-                  ))}
-                </div>
-              )}
-              {showLanguageDropdown && filteredLanguages.length === 0 && languageSearch.trim().length >= 2 && (
-                <div className="language-dropdown">
-                  <div className="language-option no-results">
-                    No languages found
-                  </div>
-                </div>
-              )}
-            </div>
+            <select
+              id="language"
+              name="language"
+              value={formData.language}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            >
+              <option value="">Select translation language</option>
+              {languages.map((lang) => (
+                <option key={lang.value} value={lang.value}>
+                  {lang.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">

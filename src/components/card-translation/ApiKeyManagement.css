@@ -97,8 +97,8 @@
 
 .btn-generate {
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -109,7 +109,7 @@
 
 .btn-generate:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
 }
 
 .btn-generate:disabled {
@@ -142,7 +142,7 @@
 
 .key-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--primary-pink);
 }
 
 .btn-toggle,
@@ -187,7 +187,7 @@
 
 /* Instructions */
 .instructions {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%);
   color: white;
   padding: 2rem;
   border-radius: 12px;

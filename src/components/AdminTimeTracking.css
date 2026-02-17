@@ -308,7 +308,7 @@
 }
 
 .summary-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%);
   color: white;
   padding: 20px;
   border-radius: 12px;
@@ -319,7 +319,7 @@
 }
 
 .summary-card:nth-child(1) {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%);
 }
 
 .summary-card:nth-child(2) {
@@ -327,7 +327,7 @@
 }
 
 .summary-card:nth-child(3) {
-  background: linear-gradient(135deg, #667eea 0%, #4338ca 100%);
+  background: linear-gradient(135deg, var(--primary-pink) 0%, #4338ca 100%);
 }
 
 .summary-card:nth-child(4) {

@@ -15,9 +15,9 @@
   text-align: center;
   margin-bottom: 40px;
   padding: 40px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   border-radius: 12px;
-  color: white;
+  color: var(--text-on-primary);
 }
 
 .installation-header h1 {
@@ -38,11 +38,11 @@
 
 .download-card {
   background: white;
-  border: 2px solid #667eea;
+  border: 2px solid var(--primary-pink);
   border-radius: 12px;
   padding: 40px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.1);
 }
 
 .download-icon {
@@ -62,8 +62,8 @@
 }
 
 .download-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   border: none;
   padding: 18px 40px;
   font-size: 1.2em;
@@ -74,7 +74,7 @@
   gap: 10px;
   transition: all 0.3s ease;
   font-weight: 600;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
 }
 
 .download-btn:hover {
@@ -133,7 +133,7 @@
 }
 
 .requirement-card:hover {
-  border-color: #667eea;
+  border-color: var(--primary-pink);
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
   transform: translateY(-3px);
 }
@@ -166,7 +166,7 @@
   content: '✓';
   position: absolute;
   left: 0;
-  color: #667eea;
+  color: var(--primary-pink);
   font-weight: bold;
 }
 
@@ -187,7 +187,7 @@
   border-radius: 12px;
   padding: 30px;
   margin-bottom: 25px;
-  border-left: 5px solid #667eea;
+  border-left: 5px solid var(--primary-pink);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }
@@ -207,7 +207,7 @@
 .step-number {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -331,7 +331,7 @@
 }
 
 .copy-btn {
-  background: #667eea;
+  background: var(--primary-pink);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -394,7 +394,7 @@
 }
 
 .menu-arrow {
-  color: #667eea;
+  color: var(--primary-pink);
   font-size: 1.2em;
   font-weight: bold;
 }
@@ -506,7 +506,7 @@
 }
 
 .support-btn {
-  background: #667eea;
+  background: var(--primary-pink);
   color: white;
   padding: 15px 30px;
   border-radius: 8px;
@@ -524,12 +524,12 @@
 
 .support-btn.secondary {
   background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: var(--primary-pink);
+  border: 2px solid var(--primary-pink);
 }
 
 .support-btn.secondary:hover {
-  background: #667eea;
+  background: var(--primary-pink);
   color: white;
 }
 

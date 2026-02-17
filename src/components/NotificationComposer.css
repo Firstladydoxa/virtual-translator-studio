@@ -13,8 +13,8 @@
 .composer-header {
   padding: 25px 30px;
   border-bottom: 2px solid #f0f0f0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   border-radius: 12px 12px 0 0;
 }
 
@@ -66,8 +66,8 @@
 .composer-select:focus,
 .composer-textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--primary-pink);
+  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
 }
 
 .composer-textarea {
@@ -161,8 +161,8 @@
 
 .radio-option input[type="radio"]:checked + span,
 .radio-option:has(input[type="radio"]:checked) {
-  background: rgba(102, 126, 234, 0.1);
-  border-color: #667eea;
+  background: var(--gradient-subtle);
+  border-color: var(--primary-pink);
 }
 
 .user-select {
@@ -230,8 +230,8 @@
 }
 
 .send-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--text-on-primary);
   border: none;
   padding: 14px 40px;
   border-radius: 8px;
@@ -239,12 +239,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
 }
 
 .send-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
 }
 
 .send-btn:disabled {

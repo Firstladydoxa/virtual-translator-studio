@@ -93,7 +93,7 @@
 .mark-all-read-btn {
   background: transparent;
   border: none;
-  color: #667eea;
+  color: var(--primary-pink);
   font-size: 0.9em;
   cursor: pointer;
   padding: 5px 10px;
@@ -102,7 +102,7 @@
 }
 
 .mark-all-read-btn:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--gradient-subtle);
 }
 
 .notification-list {
@@ -142,7 +142,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: #667eea;
+  background: var(--primary-pink);
 }
 
 .notification-icon {
@@ -219,7 +219,7 @@
 .notification-footer button {
   background: transparent;
   border: none;
-  color: #667eea;
+  color: var(--primary-pink);
   font-size: 0.9em;
   cursor: pointer;
   padding: 8px 16px;
@@ -229,7 +229,7 @@
 }
 
 .notification-footer button:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--gradient-subtle);
 }
 
 /* Scrollbar styling */
