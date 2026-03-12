@@ -398,12 +398,12 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
       />
       
       <div className="player-controls">
-        <button onClick={handlePlayClick} className="btn-control">
+        <button onClick={handlePlayClick} className="btn-control btn-control-compact">
           {isPlaying ? '⏸️ Pause' : '▶️ Play'}
         </button>
         
-        <button onClick={toggleMute} className="btn-control">
-          {isMuted ? '🔇 Unmute (Monitor)' : '🔊 Mute'}
+        <button onClick={toggleMute} className="btn-control btn-control-compact">
+          {isMuted ? '🔇 Unmute' : '🔊 Mute'}
         </button>
         
         {!isMuted && (

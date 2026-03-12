@@ -39,9 +39,9 @@ const StudioTest: React.FC = () => {
   const [canTrack, setCanTrack] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string | null>(null);
   
-  // Audio volume controls
-  const [sourceVolume, setSourceVolume] = useState(0.3); // 30% for preaching (low)
-  const [translatorVolume, setTranslatorVolume] = useState(1.0); // 100% for translator
+  // Audio volume controls - synchronized to always sum to 100%
+  const [sourceVolume, setSourceVolume] = useState(0.1); // 10% for preaching (low)
+  const [translatorVolume, setTranslatorVolume] = useState(0.9); // 90% for translator
   const [outputVolume, setOutputVolume] = useState(0.7); // 70% for output playback
   
   // Audio mute controls for source and output
@@ -532,32 +532,45 @@ const StudioTest: React.FC = () => {
     mediaStreamRef.current = stream;
   };
 
-  // Preset volume controls
+  // Synchronized volume change handlers - ensure source + translator = 100%
+  const handleSourceVolumeChange = (newVolume: number) => {
+    setSourceVolume(newVolume);
+    setTranslatorVolume(1.0 - newVolume); // Auto-adjust translator to maintain 100% total
+    console.log(`🎚️ Source: ${Math.round(newVolume * 100)}%, Translator: ${Math.round((1.0 - newVolume) * 100)}%`);
+  };
+
+  const handleTranslatorVolumeChange = (newVolume: number) => {
+    setTranslatorVolume(newVolume);
+    setSourceVolume(1.0 - newVolume); // Auto-adjust source to maintain 100% total
+    console.log(`🎚️ Translator: ${Math.round(newVolume * 100)}%, Source: ${Math.round((1.0 - newVolume) * 100)}%`);
+  };
+
+  // Preset volume controls - all sum to 100%
   const setPreachingMode = () => {
-    setSourceVolume(0.2);  // 20% source (low)
-    setTranslatorVolume(1.0); // 100% translator
+    setSourceVolume(0.1);  // 10% source (low)
+    setTranslatorVolume(0.9); // 90% translator
     // Translation mode: Unmute source (to hear original), mute output (prevent echo)
     setSourceAudioMuted(false);
     setOutputAudioMuted(true);
-    showMessage('Translation mode: Translator voice prioritized', 'info');
+    showMessage('Translation mode: Translator voice prioritized (90%/10%)', 'info');
   };
 
   const setSingingMode = () => {
-    setSourceVolume(1.0);  // 100% source (full)
-    setTranslatorVolume(0.0); // 0% translator (muted)
+    setSourceVolume(0.9);  // 90% source
+    setTranslatorVolume(0.1); // 10% translator
     // Source Media mode: Mute source (not translating), unmute output (monitor final)
     setSourceAudioMuted(true);
     setOutputAudioMuted(false);
-    showMessage('Source Media mode: Original audio prioritized', 'info');
+    showMessage('Source Media mode: Original audio prioritized (90%/10%)', 'info');
   };
 
   const setBalancedMode = () => {
-    setSourceVolume(0.5);  // 50% source
-    setTranslatorVolume(0.8); // 80% translator
+    setSourceVolume(0.4);  // 40% source
+    setTranslatorVolume(0.6); // 60% translator
     // Balanced mode: Unmute source, mute output (still translating)
     setSourceAudioMuted(false);
     setOutputAudioMuted(true);
-    showMessage('Balanced mode: Both audios mixed', 'info');
+    showMessage('Balanced mode: Both audios mixed (40%/60%)', 'info');
   };
 
   // Profile picture capture functions
@@ -689,6 +702,8 @@ const StudioTest: React.FC = () => {
               title="Source Video"
               className="source-video"
               autoPlay={true}
+              externalVolume={sourceVolume}
+              onVolumeChange={handleSourceVolumeChange}
             />
           </div>
           <div className="video-container">
@@ -707,7 +722,7 @@ const StudioTest: React.FC = () => {
             ) : (
               <div className="video-placeholder">
                 <p>⏳ Waiting for stream...</p>
-                <p>Click "Start Translating" to begin WebRTC streaming</p>
+                <p>Click "Start Translating" to begin streaming</p>
               </div>
             )}
           </div>
@@ -752,15 +767,18 @@ const StudioTest: React.FC = () => {
               <div className="volume-control">
                 <label htmlFor="sourceVolume">
                   🔊 Source Audio Volume: {Math.round(sourceVolume * 100)}%
+                  <span style={{ fontSize: '11px', color: '#666', marginLeft: '8px' }}>
+                    (Translator: {Math.round(translatorVolume * 100)}%)
+                  </span>
                 </label>
                 <input
                   id="sourceVolume"
                   type="range"
                   min="0"
                   max="1"
-                  step="0.05"
+                  step="0.01"
                   value={sourceVolume}
-                  onChange={(e) => setSourceVolume(parseFloat(e.target.value))}
+                  onChange={(e) => handleSourceVolumeChange(parseFloat(e.target.value))}
                   className="volume-slider"
                   style={{
                     background: `linear-gradient(to right, 
@@ -789,15 +807,18 @@ const StudioTest: React.FC = () => {
               <div className="volume-control">
                 <label htmlFor="translatorVolume">
                   🎤 Translator Volume: {Math.round(translatorVolume * 100)}%
+                  <span style={{ fontSize: '11px', color: '#666', marginLeft: '8px' }}>
+                    (Source: {Math.round(sourceVolume * 100)}%)
+                  </span>
                 </label>
                 <input
                   id="translatorVolume"
                   type="range"
                   min="0"
                   max="1"
-                  step="0.05"
+                  step="0.01"
                   value={translatorVolume}
-                  onChange={(e) => setTranslatorVolume(parseFloat(e.target.value))}
+                  onChange={(e) => handleTranslatorVolumeChange(parseFloat(e.target.value))}
                   className="volume-slider"
                   style={{
                     background: `linear-gradient(to right, 

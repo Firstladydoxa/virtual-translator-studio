@@ -8,14 +8,17 @@ interface VideoPlayerProps {
   onPlay?: () => void;
   className?: string;
   autoPlay?: boolean;
+  externalVolume?: number; // External control of volume (0-1)
+  onVolumeChange?: (volume: number) => void; // Callback when volume changes
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, title, onPlay, className, autoPlay = false }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, title, onPlay, className, autoPlay = false, externalVolume, onVolumeChange }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const [isOutputVideo, setIsOutputVideo] = useState(false);
   const [streamAvailable, setStreamAvailable] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(externalVolume !== undefined ? externalVolume : 0.3);
 
   useEffect(() => {
     // Check if this is the output video
@@ -100,19 +103,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, title, onPlay, className
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
     
+    // Handle volume changes from video element's native controls
+    const handleVolumeChangeEvent = () => {
+      if (video && onVolumeChange) {
+        onVolumeChange(video.volume);
+      }
+    };
+    
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
+    video.addEventListener('volumechange', handleVolumeChangeEvent);
 
     return () => {
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
+      video.removeEventListener('volumechange', handleVolumeChangeEvent);
       
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
       }
     };
-  }, [url, title, autoPlay]);
+  }, [url, title, autoPlay, onVolumeChange]);
 
   const handlePlayClick = () => {
     if (videoRef.current) {
@@ -129,6 +141,23 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, title, onPlay, className
       }
     }
   };
+
+  // Sync with external volume control
+  useEffect(() => {
+    if (externalVolume !== undefined && externalVolume !== volume) {
+      setVolume(externalVolume);
+      if (videoRef.current) {
+        videoRef.current.volume = externalVolume;
+      }
+    }
+  }, [externalVolume]);
+
+  // Set initial volume
+  useEffect(() => {
+    if (videoRef.current && externalVolume !== undefined) {
+      videoRef.current.volume = externalVolume;
+    }
+  }, []);
 
   return (
     <div className={`video-player ${className || ''}`}>

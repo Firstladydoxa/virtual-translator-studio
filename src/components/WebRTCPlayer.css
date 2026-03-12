@@ -66,6 +66,14 @@
   transition: background 0.3s;
 }
 
+.btn-control-compact {
+  padding: 6px 12px;
+  font-size: 13px;
+  flex: 1;
+  min-width: 0;
+  max-width: calc(50% - 5px);
+}
+
 .btn-control:hover {
   background: #45a049;
 }
