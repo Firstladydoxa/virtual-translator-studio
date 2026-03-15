@@ -1,0 +1,539 @@
+/* ============================================================
+   SignTranslationStudio.css
+   Sign Language Interpretation Studio — styles
+   ============================================================ */
+
+/* ── Root container ─────────────────────────────────────────── */
+.sign-studio {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  padding: 20px;
+  font-family: inherit;
+}
+
+/* ── Message toast (reuse from StudioTest) ───────────────────── */
+.sign-studio .message {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-weight: 500;
+  font-size: 14px;
+}
+.sign-studio .message.info    { background: #1565C0; color: #fff; }
+.sign-studio .message.success { background: #2E7D32; color: #fff; }
+.sign-studio .message.error   { background: #C62828; color: #fff; }
+
+/* ── Info bar ────────────────────────────────────────────────── */
+.sign-studio .studio-info-bar {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 14px 24px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  margin-bottom: 20px;
+  border: 1px solid rgba(100, 200, 255, 0.2);
+}
+.sign-studio .translation-info h3 {
+  font-size: 18px;
+  color: #f1c40f;
+  margin: 0 0 4px;
+}
+.sign-studio .language-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  margin: 0;
+}
+
+/* ── Pivot language selector bar ─────────────────────────────── */
+.sign-pivot-selector {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(100, 200, 255, 0.35);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.pivot-label-block {
+  flex: 1 1 220px;
+  color: white;
+}
+.pivot-label-block strong { font-size: 16px; }
+.pivot-label-block p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  opacity: 0.7;
+}
+.pivot-dropdown {
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 2px solid #4fc3f7;
+  background: #0d1b2a;
+  color: white;
+  cursor: pointer;
+  min-width: 200px;
+  transition: border-color 0.2s;
+}
+.pivot-dropdown:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.pivot-embed-warning {
+  background: rgba(255,152,0,0.15);
+  border: 1px solid #FF9800;
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: #FFE0B2;
+  font-size: 13px;
+  flex: 1 1 250px;
+}
+
+/* ── Split screen ────────────────────────────────────────────── */
+.sign-split-screen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Stack panels only on small phones */
+@media (max-width: 640px) {
+  .sign-split-screen {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Panel shared ────────────────────────────────────────────── */
+.split-panel {
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.split-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.4);
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.split-panel-badge {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.4px;
+}
+.badge--source {
+  background: rgba(33, 150, 243, 0.25);
+  border: 1px solid #2196F3;
+  color: #90CAF9;
+}
+.badge--sign {
+  background: rgba(76, 175, 80, 0.25);
+  border: 1px solid #4CAF50;
+  color: #A5D6A7;
+}
+
+/* ── Source panel ────────────────────────────────────────────── */
+.split-panel--source {
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+}
+
+/* Wrapper that fills all remaining panel height */
+.source-video-wrapper {
+  flex: 1;
+  position: relative;
+  background: #000;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The raw HLS <video> element: fill the wrapper */
+.source-hls-video {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  background: #000;
+  object-fit: contain;
+  display: block;
+}
+
+/* Loading overlay before stream connects */
+.source-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.75);
+  color: rgba(255,255,255,0.85);
+  gap: 10px;
+  z-index: 2;
+  border-radius: 0;
+  text-align: center;
+  padding: 16px;
+}
+.source-loading-icon {
+  font-size: 36px;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.source-loading-overlay p {
+  font-size: 13px;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Unmute overlay button shown once stream is playing */
+.source-unmute-btn {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.6);
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.source-unmute-btn:hover {
+  background: rgba(33,150,243,0.8);
+  border-color: #4fc3f7;
+}
+
+.source-volume-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
+}
+.source-mute-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  padding: 3px 7px;
+  font-size: 15px;
+  line-height: 1;
+  transition: border-color 0.15s;
+}
+.source-mute-btn:hover { border-color: rgba(255,255,255,0.6); }
+.inline-slider {
+  width: 90px;
+  accent-color: #4fc3f7;
+  cursor: pointer;
+}
+
+/* LIVE badge inline in output header */
+.output-monitor-header .live-badge {
+  display: inline-block;
+  position: static;
+  margin-left: 10px;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.embed-wrapper {
+  flex: 1;
+  display: flex;
+  min-height: 360px;
+}
+.source-embed {
+  flex: 1;
+  border: none;
+  min-height: 360px;
+}
+
+/* ── Camera panel ────────────────────────────────────────────── */
+.split-panel--camera { }
+
+.camera-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.camera-device-select {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  max-width: 160px;
+  cursor: pointer;
+}
+.mirror-btn {
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  color: rgba(255,255,255,0.8);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.mirror-btn:hover { background: rgba(255,255,255,0.15); }
+
+.camera-preview-wrapper {
+  flex: 1;
+  position: relative;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  overflow: hidden;
+}
+.camera-preview-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.camera-preview-video.mirrored {
+  transform: scaleX(-1);
+}
+
+.live-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(220, 0, 0, 0.85);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  animation: pulse-live 1.5s infinite;
+}
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+.camera-placeholder {
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  padding: 40px 20px;
+}
+.camera-placeholder-icon { font-size: 56px; margin-bottom: 12px; }
+.camera-placeholder p { margin: 4px 0; font-size: 14px; }
+.camera-placeholder-hint { font-size: 12px; opacity: 0.7; margin-top: 8px !important; }
+.camera-error-msg {
+  color: #f48fb1;
+  font-size: 12px;
+  margin-top: 10px !important;
+  background: rgba(220,0,0,0.1);
+  border: 1px solid rgba(220,0,0,0.3);
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.camera-action-bar {
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  gap: 10px;
+}
+.btn-start-camera {
+  flex: 1;
+  padding: 10px;
+  background: linear-gradient(135deg, #1565C0, #0288D1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn-start-camera:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-stop-camera {
+  flex: 1;
+  padding: 10px;
+  background: linear-gradient(135deg, #424242, #616161);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-stop-camera:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Output monitor ──────────────────────────────────────────── */
+.sign-output-monitor {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(76,175,80,0.35);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+.output-monitor-header h4 {
+  color: #A5D6A7;
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+.output-monitor-hint {
+  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+  margin: 0 0 12px;
+}
+.output-volume-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+}
+.output-mute-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 16px;
+  line-height: 1;
+}
+.output-mute-btn:hover { border-color: rgba(255,255,255,0.6); }
+.output-inline-slider { width: 120px; accent-color: #A5D6A7; cursor: pointer; }
+.output-volume-pct { min-width: 44px; font-size: 12px; color: rgba(255,255,255,0.7); }
+.output-monitor-video {
+  width: 100%;
+}
+
+/* ── Controls section ────────────────────────────────────────── */
+.sign-studio .controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Stream warning ──────────────────────────────────────────── */
+.stream-warning {
+  background: rgba(255,152,0,0.18);
+  border: 1px solid #FF9800;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #3e2000;
+  font-size: 13px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* ── Stream info tips ────────────────────────────────────────── */
+.stream-info-tips {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 18px;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+}
+.stream-info-tips p { margin: 0 0 8px; font-size: 13px; }
+.stream-info-tips ul { margin: 0; padding-left: 20px; line-height: 1.8; }
+
+/* ── Reused controls from StudioTest ────────────────────────── */
+.sign-studio .translation-controls,
+.sign-studio .time-tracking-controls {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 20px;
+}
+.sign-studio .translation-controls h3,
+.sign-studio .time-tracking-controls h3 {
+  font-size: 16px;
+  margin: 0 0 14px;
+  color: #333;
+}
+.sign-studio .button-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sign-studio .btn-primary {
+  background: linear-gradient(135deg, #1565C0, #0288D1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.sign-studio .btn-primary:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+.sign-studio .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.sign-studio .btn-danger {
+  background: linear-gradient(135deg, #b71c1c, #e53935);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.sign-studio .btn-danger:disabled { opacity: 0.4; cursor: not-allowed; }
+.sign-studio .btn-large { min-width: 160px; }
+
+.sign-studio .stream-status {
+  margin-top: 14px;
+  font-size: 14px;
+  color: #555;
+}
+
+.sign-studio .tracking-status-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sign-studio .status-badge.status-ready {
+  background: #e8f5e9;
+  color: #2E7D32;
+  border: 1px solid #A5D6A7;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 13px;
+  font-weight: 600;
+}

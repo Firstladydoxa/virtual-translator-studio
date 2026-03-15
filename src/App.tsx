@@ -5,6 +5,8 @@ import RegisterForm from './components/RegisterForm';
 import ForgotPassword from './components/ForgotPassword';
 import TranslationStudio from './components/TranslationStudio';
 import StudioTest from './components/StudioTest';
+import RelayStudio from './components/RelayStudio';
+import SignTranslationStudio from './components/SignTranslationStudio';
 import AdminDashboard from './components/AdminDashboard';
 import MonitorLive from './components/MonitorLive';
 import ManageSourceLink from './components/ManageSourceLink';
@@ -22,16 +24,22 @@ const AppContent: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('home');
 
-  // Initialize OneSignal when user is authenticated
+  // Initialize OneSignal once when user is authenticated
   useEffect(() => {
-    if (isAuthenticated && token) {
+    let isSubscribed = true;
+    
+    if (isAuthenticated && token && !oneSignalService.isInitialized()) {
       oneSignalService.init().then(() => {
+        if (!isSubscribed) return; // Component unmounted
+        
         // Auto-subscribe if user hasn't been prompted yet
         const permission = oneSignalService.getPermissionStatus();
         if (permission === 'default') {
           // Show prompt after 5 seconds
           setTimeout(() => {
-            oneSignalService.showPrompt();
+            if (isSubscribed) {
+              oneSignalService.showPrompt();
+            }
           }, 5000);
         } else if (permission === 'granted') {
           // Already granted, just subscribe
@@ -39,7 +47,21 @@ const AppContent: React.FC = () => {
         }
       });
     }
-  }, [isAuthenticated, token]);
+    
+    return () => {
+      isSubscribed = false;
+    };
+  }, [isAuthenticated]); // Only depend on isAuthenticated, not token
+
+  // Update subscription token when it changes (but OneSignal already initialized)
+  useEffect(() => {
+    if (isAuthenticated && token && oneSignalService.isInitialized()) {
+      const permission = oneSignalService.getPermissionStatus();
+      if (permission === 'granted') {
+        oneSignalService.subscribe(token);
+      }
+    }
+  }, [token, isAuthenticated]);
 
   if (isLoading) {
     return (
@@ -78,7 +100,10 @@ const AppContent: React.FC = () => {
         <button className="menu-button" onClick={() => setSidebarOpen(true)}>
           ☰
         </button>
-        <h1 className="app-title">Live Translation System</h1>
+        <h1 className="app-title">
+          <span className="app-title-line1">Translators</span>
+          <span className="app-title-line2">Virtual Studio</span>
+        </h1>
         <div className="app-header-actions">
           {token && <NotificationCenter token={token} />}
           <div className="user-badge">
@@ -99,6 +124,8 @@ const AppContent: React.FC = () => {
         {currentPage === 'monitorlive' && <MonitorLive />}
         {currentPage === 'studio' && <TranslationStudio />}
         {currentPage === 'studiotest' && <StudioTest />}
+        {currentPage === 'relay-studio' && <RelayStudio />}
+        {currentPage === 'sign-studio' && <SignTranslationStudio />}
         {currentPage === 'manage-source' && <ManageSourceLink />}
         {currentPage === 'admin' && <AdminDashboard />}
         {currentPage === 'card-translation' && (

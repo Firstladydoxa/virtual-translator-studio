@@ -48,6 +48,12 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(defaultMuted);
   const [volume, setVolume] = useState(externalVolume !== undefined ? externalVolume : 0.7);
+
+  // Refs that always hold the *current* prop values — safe to read inside async closures
+  const externalMutedRef = useRef<boolean | undefined>(externalMuted);
+  const externalVolumeRef = useRef<number | undefined>(externalVolume);
+  externalMutedRef.current = externalMuted;   // updated synchronously on every render
+  externalVolumeRef.current = externalVolume;
   
   const deviceRef = useRef<Device | null>(null);
   const consumerTransportRef = useRef<Transport | null>(null);
@@ -129,6 +135,12 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
       // Create MediaStream for video element
       const stream = new MediaStream();
 
+      // Only add the first video + first audio track.
+      // Stale backend sessions can produce duplicate tracks (2 video + 2 audio)
+      // which prevent the <video> element from ever reaching readyState > 0.
+      let hasVideo = false;
+      let hasAudio = false;
+
       // Consume each track
       for (const consumerData of consumers) {
         const consumer = await consumerTransportRef.current.consume({
@@ -154,10 +166,21 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
         // Ensure track is enabled
         track.enabled = true;
         
-        stream.addTrack(track);
-        console.log(`✅ Consuming ${consumer.kind}, ID:`, consumer.id);
+        // Only add first video and first audio — duplicates from stale sessions
+        // cause the video element to stay at readyState 0 (no frames delivered).
+        if (consumer.kind === 'video' && !hasVideo) {
+          stream.addTrack(track);
+          hasVideo = true;
+          console.log(`✅ Consuming video, ID:`, consumer.id);
+        } else if (consumer.kind === 'audio' && !hasAudio) {
+          stream.addTrack(track);
+          hasAudio = true;
+          console.log(`✅ Consuming audio, ID:`, consumer.id);
+        } else {
+          console.log(`⏭️ Skipping duplicate ${consumer.kind} track, ID:`, consumer.id);
+        }
 
-        // Resume consumer
+        // Resume all consumers regardless (keeps signalling correct)
         await request('/webrtc/resume-consumer', 'POST', {
           consumerId: consumer.id
         });
@@ -182,16 +205,21 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
         console.log('📺 Attaching stream to video element');
         const videoElement = videoRef.current;
         
-        // Set video element properties BEFORE assigning srcObject
-        videoElement.muted = defaultMuted; // Muted by default to prevent echo
-        videoElement.volume = volume;
         videoElement.autoplay = autoPlay;
         videoElement.controls = false;
         videoElement.playsInline = true;
         
         // Assign the stream
         videoElement.srcObject = stream;
-        
+
+        // Read live prop values via refs — NOT stale closure values
+        const effectiveMuted = externalMutedRef.current !== undefined ? externalMutedRef.current : defaultMuted;
+        const effectiveVolume = externalVolumeRef.current !== undefined ? externalVolumeRef.current : volume;
+        videoElement.muted = effectiveMuted;
+        videoElement.volume = effectiveVolume;
+        setIsMuted(effectiveMuted);
+        setVolume(effectiveVolume);
+
         console.log('📺 Video element configured:', {
           srcObject: !!videoElement.srcObject,
           readyState: videoElement.readyState,
@@ -200,40 +228,22 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
           autoplay: videoElement.autoplay
         });
         
-        // Wait for video to be ready - use canplay instead of loadedmetadata
-        await new Promise<void>((resolve) => {
-          // Check if already ready
-          if (videoElement.readyState >= 3) { // HAVE_FUTURE_DATA
-            console.log('✅ Video already ready (readyState=' + videoElement.readyState + ')');
-            resolve();
-            return;
-          }
-          
-          const timeout = setTimeout(() => {
-            console.log('⏱️ Video ready timeout, readyState:', videoElement.readyState);
-            resolve();
-          }, 5000);
-          
-          const onCanPlay = () => {
-            clearTimeout(timeout);
-            videoElement.removeEventListener('canplay', onCanPlay);
-            console.log('✅ Video can play (readyState=' + videoElement.readyState + ')');
-            resolve();
-          };
-          
-          videoElement.addEventListener('canplay', onCanPlay);
-        });
-        
-        // Try to play
+        // For live WebRTC streams, srcObject readyState starts at 0 and only
+        // advances once RTP data arrives. We must NOT await play() here because
+        // it returns a Promise that only resolves after readyState advances —
+        // creating a deadlock that leaves the screen black indefinitely.
+        // Instead: fire play() and mark as connected immediately; the video
+        // element will display frames as soon as the first RTP packets arrive.
         if (autoPlay) {
-          try {
-            await videoElement.play();
-            setIsPlaying(true);
-            console.log('✅ Video autoplay started');
-          } catch (playError) {
-            console.warn('⚠️ Autoplay failed:', playError);
-            // Autoplay blocked - user will need to click play button
-          }
+          videoElement.play()
+            .then(() => {
+              setIsPlaying(true);
+              console.log('✅ Video playing');
+            })
+            .catch((playError) => {
+              // Autoplay blocked or not-yet-ready — user can click Play button
+              console.warn('⚠️ Autoplay deferred:', playError.message);
+            });
         }
       }
 
@@ -398,26 +408,30 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({
       />
       
       <div className="player-controls">
-        <button onClick={handlePlayClick} className="btn-control btn-control-compact">
-          {isPlaying ? '⏸️ Pause' : '▶️ Play'}
+        <button onClick={handlePlayClick} className="btn-control-compact">
+          {isPlaying ? '⏸ Pause' : '▶ Play'}
         </button>
         
-        <button onClick={toggleMute} className="btn-control btn-control-compact">
+        <button onClick={toggleMute} className="btn-control-compact">
           {isMuted ? '🔇 Unmute' : '🔊 Mute'}
         </button>
-        
+
         {!isMuted && (
-          <div className="volume-control">
-            <label>🔊 Volume: {Math.round(volume * 100)}%</label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={volume}
-              onChange={handleVolumeChange}
-            />
-          </div>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={volume}
+            onChange={(e) => {
+              const v = parseFloat(e.target.value);
+              setVolume(v);
+              if (videoRef.current) videoRef.current.volume = v;
+              if (onVolumeChange) onVolumeChange(v);
+            }}
+            style={{ width: '90px', accentColor: '#4fc3f7', cursor: 'pointer' }}
+            title={`Volume: ${Math.round(volume * 100)}%`}
+          />
         )}
       </div>
       

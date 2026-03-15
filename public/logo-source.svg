@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E91E63"/>
+      <stop offset="100%" stop-color="#2196F3"/>
+    </linearGradient>
+    <linearGradient id="brandGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C2185B"/>
+      <stop offset="100%" stop-color="#1565C0"/>
+    </linearGradient>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0d0d1a"/>
+    </linearGradient>
+    <linearGradient id="micGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F06292"/>
+      <stop offset="100%" stop-color="#E91E63"/>
+    </linearGradient>
+    <linearGradient id="handGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#42A5F5"/>
+      <stop offset="100%" stop-color="#1565C0"/>
+    </linearGradient>
+    <linearGradient id="globeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#26C6DA"/>
+      <stop offset="100%" stop-color="#00897B"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.4)"/>
+    </filter>
+    <clipPath id="roundedClip">
+      <rect width="512" height="512" rx="96" ry="96"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" ry="96" fill="url(#brandGrad)"/>
+  <rect width="512" height="512" rx="96" ry="96"
+        fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3"/>
+
+  <!-- Decorative concentric arcs -->
+  <g opacity="0.15" stroke="white" stroke-width="2" fill="none">
+    <circle cx="256" cy="210" r="200"/>
+    <circle cx="256" cy="210" r="165"/>
+    <circle cx="256" cy="210" r="130"/>
+  </g>
+
+  <!-- MONITOR -->
+  <rect x="112" y="98" width="288" height="192" rx="18" ry="18"
+        fill="url(#screenGrad)" stroke="rgba(255,255,255,0.35)" stroke-width="3"
+        filter="url(#shadow)"/>
+  <rect x="126" y="112" width="260" height="164" rx="12" ry="12" fill="#0a0a1a"/>
+
+  <!-- Split screen line -->
+  <line x1="256" y1="116" x2="256" y2="272"
+        stroke="url(#brandGrad)" stroke-width="2.5" opacity="0.8"/>
+
+  <!-- Left panel: broadcast bars -->
+  <g opacity="0.9">
+    <rect x="140" y="158" width="24" height="68" rx="4" fill="#42A5F5" opacity="0.7"/>
+    <rect x="170" y="173" width="24" height="53" rx="4" fill="#26C6DA" opacity="0.75"/>
+    <rect x="200" y="193" width="24" height="33" rx="4" fill="#42A5F5" opacity="0.8"/>
+    <polygon points="148,142 148,155 158,148.5" fill="rgba(255,255,255,0.6)"/>
+    <line x1="134" y1="254" x2="248" y2="254" stroke="rgba(66,165,245,0.4)" stroke-width="1.5"/>
+    <line x1="134" y1="264" x2="215" y2="264" stroke="rgba(66,165,245,0.25)" stroke-width="1.5"/>
+  </g>
+
+  <!-- Right panel: camera / person -->
+  <g opacity="0.9">
+    <circle cx="303" cy="185" r="22" fill="rgba(240,98,146,0.5)"/>
+    <path d="M270 262 Q303 234 336 262" fill="rgba(240,98,146,0.35)"/>
+    <rect x="265" y="118" width="38" height="14" rx="4" fill="#E91E63" opacity="0.9"/>
+    <text x="284" y="129" text-anchor="middle" font-family="Arial,sans-serif"
+          font-size="9" font-weight="700" fill="white">LIVE</text>
+    <circle cx="261" cy="125" r="4" fill="#ff4444">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Monitor stand -->
+  <rect x="244" y="290" width="24" height="18" rx="4" fill="rgba(255,255,255,0.25)"/>
+  <rect x="204" y="305" width="104" height="10" rx="5"
+        fill="rgba(255,255,255,0.3)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+
+  <!-- MICROPHONE (bottom-left) -->
+  <g transform="translate(68, 310)" filter="url(#shadow)">
+    <rect x="0" y="0" width="26" height="46" rx="13"
+          fill="url(#micGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+    <line x1="5" y1="12" x2="21" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <line x1="5" y1="20" x2="21" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <line x1="5" y1="28" x2="21" y2="28" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <path d="M13 46 Q13 62 13 70" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"
+          fill="none" stroke-linecap="round"/>
+    <line x1="3" y1="70" x2="23" y2="70" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"
+          stroke-linecap="round"/>
+    <path d="M30 12 Q40 23 30 34" stroke="#F06292" stroke-width="2" fill="none"
+          stroke-linecap="round" opacity="0.9"/>
+    <path d="M35 7 Q50 23 35 39" stroke="#F06292" stroke-width="1.5" fill="none"
+          stroke-linecap="round" opacity="0.6"/>
+  </g>
+
+  <!-- GLOBE (top-right) -->
+  <g transform="translate(370, 44)" filter="url(#shadow)">
+    <circle cx="34" cy="34" r="32" fill="url(#globeGrad)"
+            stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+    <ellipse cx="34" cy="34" rx="32" ry="12" fill="none"
+             stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+    <line x1="34" y1="2" x2="34" y2="66"
+          stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+    <line x1="2" y1="34" x2="66" y2="34"
+          stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+    <path d="M34 2 Q54 34 34 66" fill="none"
+          stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+    <path d="M34 2 Q14 34 34 66" fill="none"
+          stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+  </g>
+
+  <!-- SIGN-LANGUAGE HAND (bottom-right) -->
+  <g transform="translate(374, 345)" filter="url(#shadow)">
+    <rect x="8" y="28" width="48" height="38" rx="9"
+          fill="url(#handGrad)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+    <rect x="0" y="34" width="14" height="9" rx="4.5"
+          fill="#42A5F5" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+    <rect x="14" y="4" width="11" height="28" rx="5.5"
+          fill="#42A5F5" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+    <rect x="27" y="2" width="11" height="30" rx="5.5"
+          fill="#42A5F5" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+    <rect x="40" y="12" width="11" height="18" rx="5.5"
+          fill="#42A5F5" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+    <rect x="52" y="26" width="9" height="14" rx="4.5"
+          fill="#42A5F5" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  </g>
+
+  <!-- STATUS DOTS (top-left) -->
+  <g transform="translate(46, 46)">
+    <circle cx="0"  cy="10" r="8" fill="#4CAF50" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+    <circle cx="22" cy="10" r="8" fill="#FFC107" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+    <circle cx="44" cy="10" r="8" fill="#F44336" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  </g>
+
+  <!-- APP NAME: "Loveworld" large, then "Translators Virtual Studio" smaller below -->
+  <!-- Line 1 shadow -->
+  <text x="258" y="398" text-anchor="middle" font-family="Arial Black,Arial,sans-serif"
+        font-size="36" font-weight="900" fill="rgba(0,0,0,0.35)" letter-spacing="1">Loveworld</text>
+  <!-- Line 1 main -->
+  <text x="256" y="396" text-anchor="middle" font-family="Arial Black,Arial,sans-serif"
+        font-size="36" font-weight="900" fill="white" letter-spacing="1">Loveworld</text>
+
+  <!-- Divider line -->
+  <line x1="96" y1="408" x2="416" y2="408" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+
+  <!-- Line 2 shadow -->
+  <text x="258" y="445" text-anchor="middle" font-family="Arial Black,Arial,sans-serif"
+        font-size="20" font-weight="900" fill="rgba(0,0,0,0.35)" letter-spacing="0.5">Translators Virtual Studio</text>
+  <!-- Line 2 main -->
+  <text x="256" y="443" text-anchor="middle" font-family="Arial Black,Arial,sans-serif"
+        font-size="20" font-weight="900" fill="rgba(255,255,255,0.92)" letter-spacing="0.5">Translators Virtual Studio</text>
+</svg>

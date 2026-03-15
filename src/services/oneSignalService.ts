@@ -23,12 +23,18 @@ class OneSignalService {
   private initialized = false;
 
   /**
+   * Check if OneSignal is already initialized
+   */
+  isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  /**
    * Initialize OneSignal Web SDK v16
    */
   async init() {
     if (this.initialized) {
-      console.log('OneSignal already initialized');
-      return;
+      return; // Silently return if already initialized
     }
 
     try {

@@ -15,10 +15,16 @@ interface VideoPlayerProps {
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, title, onPlay, className, autoPlay = false, externalVolume, onVolumeChange }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
+  const onVolumeChangeRef = useRef(onVolumeChange);
   const [isOutputVideo, setIsOutputVideo] = useState(false);
   const [streamAvailable, setStreamAvailable] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(externalVolume !== undefined ? externalVolume : 0.3);
+
+  // Keep ref in sync so HLS useEffect never needs onVolumeChange as a dependency
+  useEffect(() => {
+    onVolumeChangeRef.current = onVolumeChange;
+  }, [onVolumeChange]);
 
   useEffect(() => {
     // Check if this is the output video
@@ -105,8 +111,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, title, onPlay, className
     
     // Handle volume changes from video element's native controls
     const handleVolumeChangeEvent = () => {
-      if (video && onVolumeChange) {
-        onVolumeChange(video.volume);
+      if (video && onVolumeChangeRef.current) {
+        onVolumeChangeRef.current(video.volume);
       }
     };
     
@@ -124,7 +130,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, title, onPlay, className
         hlsRef.current = null;
       }
     };
-  }, [url, title, autoPlay, onVolumeChange]);
+  // onVolumeChange intentionally omitted — using ref to avoid HLS reload on every volume change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, title, autoPlay]);
 
   const handlePlayClick = () => {
     if (videoRef.current) {

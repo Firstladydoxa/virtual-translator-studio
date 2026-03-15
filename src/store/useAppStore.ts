@@ -90,16 +90,18 @@ export const useAppStore = create<AppState>()(
       // Computed getters
       getTranslationLanguage: () => {
         const state = get();
-        const language = state.streamingDetails?.language || 
-                        state.user?.language?.value || 
+        const language = state.streamingDetails?.language ||
+                        state.user?.translationLanguage?.value ||
+                        state.user?.language?.value ||
                         'unknown';
         return language.charAt(0).toUpperCase() + language.slice(1);
       },
       
       getWatchUrl: () => {
         const state = get();
-        const language = state.streamingDetails?.language || 
-                        state.user?.language?.value || 
+        const language = state.streamingDetails?.language ||
+                        state.user?.translationLanguage?.value ||
+                        state.user?.language?.value ||
                         'english';
         return state.streamingDetails?.watchUrl || 
                `https://tni-out.ceflixcdn.com/translations/${language}/playlist.m3u8`;

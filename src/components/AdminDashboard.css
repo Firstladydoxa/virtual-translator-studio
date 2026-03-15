@@ -347,6 +347,74 @@
   font-style: italic;
 }
 
+/* ── Language inline edit ─────────────────────────────────── */
+.lang-display-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-lang-edit {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+.btn-lang-edit:hover { opacity: 1; }
+
+.lang-edit-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.lang-select {
+  padding: 4px 8px;
+  border: 1px solid var(--primary-pink);
+  border-radius: 6px;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  max-width: 160px;
+}
+.lang-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.15);
+}
+
+.btn-lang-save {
+  padding: 4px 8px;
+  background: #2E7D32;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+.btn-lang-save:hover:not(:disabled) { background: #1b5e20; }
+.btn-lang-save:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-lang-cancel {
+  padding: 4px 8px;
+  background: #757575;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+.btn-lang-cancel:hover { background: #424242; }
+
 @media (max-width: 768px) {
   .admin-dashboard {
     padding: 15px;

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../store/useAppStore';
+import { languageService } from '../services/api';
+import { Language } from '../types';
 import NotificationComposer from './NotificationComposer';
 import AdminTimeTracking from './AdminTimeTracking';
 import './AdminDashboard.css';
@@ -34,6 +36,10 @@ const AdminDashboard: React.FC = () => {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const [languages, setLanguages] = useState<Language[]>([]);
+  // Track which user's language is being edited and the pending selection
+  const [editingLanguageUserId, setEditingLanguageUserId] = useState<string | null>(null);
+  const [pendingLanguageValue, setPendingLanguageValue] = useState<string>('');
 
   const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3001'
@@ -108,6 +114,33 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const updateUserLanguage = async (userId: string) => {
+    const lang = languages.find((l) => l.value === pendingLanguageValue);
+    if (!lang) return;
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_URL}/api/admin/users/${userId}/language`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ label: lang.label, value: lang.value })
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update language');
+      }
+      showMessage(`Language updated to "${lang.label}" successfully`, 'success');
+      setEditingLanguageUserId(null);
+      setPendingLanguageValue('');
+      await fetchUsers();
+    } catch (error: any) {
+      console.error('Error updating language:', error);
+      showMessage(error.message, 'error');
+    }
+  };
+
   const deleteUser = async (userId: string, email: string) => {
     if (!window.confirm(`Are you sure you want to delete user: ${email}?`)) {
       return;
@@ -139,10 +172,13 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      await Promise.all([fetchUsers(), fetchStats()]);
+      await Promise.all([
+        fetchUsers(),
+        fetchStats(),
+        languageService.getLanguages().then(setLanguages).catch(console.error),
+      ]);
       setLoading(false);
     };
-
     loadData();
   }, []);
 
@@ -289,7 +325,46 @@ const AdminDashboard: React.FC = () => {
                   <td>{user.email}</td>
                   <td>{user.username}</td>
                   <td>{user.country}</td>
-                  <td>{user.translationLanguage.label}</td>
+                  <td>
+                    {editingLanguageUserId === user._id ? (
+                      <div className="lang-edit-cell">
+                        <select
+                          value={pendingLanguageValue}
+                          onChange={(e) => setPendingLanguageValue(e.target.value)}
+                          className="lang-select"
+                          autoFocus
+                        >
+                          <option value="">— select —</option>
+                          {languages.map((l) => (
+                            <option key={l.value} value={l.value}>{l.label}</option>
+                          ))}
+                        </select>
+                        <button
+                          className="btn-lang-save"
+                          onClick={() => updateUserLanguage(user._id)}
+                          disabled={!pendingLanguageValue}
+                          title="Save language"
+                        >✓</button>
+                        <button
+                          className="btn-lang-cancel"
+                          onClick={() => { setEditingLanguageUserId(null); setPendingLanguageValue(''); }}
+                          title="Cancel"
+                        >✕</button>
+                      </div>
+                    ) : (
+                      <div className="lang-display-cell">
+                        <span>{user.translationLanguage.label}</span>
+                        <button
+                          className="btn-lang-edit"
+                          onClick={() => {
+                            setEditingLanguageUserId(user._id);
+                            setPendingLanguageValue(user.translationLanguage.value);
+                          }}
+                          title="Edit language"
+                        >✏️</button>
+                      </div>
+                    )}
+                  </td>
                   <td>
                     <span className={`role-badge role-${user.role}`}>
                       {user.role}

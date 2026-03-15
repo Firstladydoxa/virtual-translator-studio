@@ -1,16 +1,16 @@
 :root {
   /* Primary Theme Colors - Dark Pink & Royal Blue Gradient */
-  --primary-pink: #E91E63;
-  --primary-pink-dark: #C2185B;
-  --primary-pink-light: #F06292;
+  --primary-pink: #F06292;
+  --primary-pink-dark: #E91E63;
+  --primary-pink-light: #F8BBD0;
   --primary-blue: #2196F3;
   --primary-blue-dark: #1565C0;
   --primary-blue-light: #42A5F5;
   
   /* Gradient Backgrounds */
-  --gradient-primary: linear-gradient(135deg, #E91E63 0%, #2196F3 100%);
-  --gradient-primary-reverse: linear-gradient(135deg, #2196F3 0%, #E91E63 100%);
-  --gradient-subtle: linear-gradient(135deg, rgba(233, 30, 99, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%);
+  --gradient-primary: linear-gradient(135deg, #F06292 0%, #2196F3 100%);
+  --gradient-primary-reverse: linear-gradient(135deg, #2196F3 0%, #F06292 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(240, 98, 146, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%);
   
   /* Text Colors - High Contrast */
   --text-primary: #1a1a1a;

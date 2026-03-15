@@ -8,6 +8,10 @@ export interface User {
     label: string;
     value: string;
   };
+  translationLanguage?: {
+    label: string;
+    value: string;
+  };
   role?: 'translator' | 'admin' | 'superadmin' | 'designer';
 }
 

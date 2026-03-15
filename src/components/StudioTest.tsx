@@ -353,7 +353,7 @@ const StudioTest: React.FC = () => {
       isTranslatingRef.current = true;
       setLiveStatus('connecting');
       setOutputStreamAvailable(false);
-      showMessage('Starting WebRTC translation with audio mixing...', 'info');
+      showMessage('Starting translation studio with audio mixing...', 'info');
 
       // Track translation session start
       try {
@@ -392,14 +392,39 @@ const StudioTest: React.FC = () => {
         console.error('Failed to track translation session:', trackError);
       }
 
-      // Get source video element
+      // Get source video element — wait up to 8 seconds for it to be ready
       const sourceVideo = document.querySelector('video.source-video') as HTMLVideoElement;
       
-      if (!sourceVideo || sourceVideo.readyState < 2) {
-        showMessage('Source video not ready. Please wait.', 'error');
+      if (!sourceVideo) {
+        showMessage('Source video element not found. Please refresh.', 'error');
         setIsTranslating(false);
         isTranslatingRef.current = false;
         return;
+      }
+
+      if (sourceVideo.readyState < 2) {
+        showMessage('Source video is loading, please wait a moment...', 'info');
+        // Poll up to 8 seconds (16 × 500ms) for readyState to reach HAVE_CURRENT_DATA
+        const ready = await new Promise<boolean>((resolve) => {
+          if (sourceVideo.readyState >= 2) { resolve(true); return; }
+          let attempts = 0;
+          const interval = setInterval(() => {
+            attempts++;
+            if (sourceVideo.readyState >= 2) {
+              clearInterval(interval);
+              resolve(true);
+            } else if (attempts >= 16) {
+              clearInterval(interval);
+              resolve(false);
+            }
+          }, 500);
+        });
+        if (!ready) {
+          showMessage('Source video not ready. Check your internet connection and try again.', 'error');
+          setIsTranslating(false);
+          isTranslatingRef.current = false;
+          return;
+        }
       }
 
       // Create canvas for video capture
@@ -517,7 +542,7 @@ const StudioTest: React.FC = () => {
       
       setLiveStatus('online');
       setOutputStreamAvailable(true);
-      showMessage('WebRTC streaming started! Ultra-low latency <500ms', 'success');
+      showMessage('Translation studio live! Your translation is now streaming.', 'success');
       
       console.log('✅ WebRTC translation started successfully!');
 
@@ -558,8 +583,8 @@ const StudioTest: React.FC = () => {
   const setSingingMode = () => {
     setSourceVolume(0.9);  // 90% source
     setTranslatorVolume(0.1); // 10% translator
-    // Source Media mode: Mute source (not translating), unmute output (monitor final)
-    setSourceAudioMuted(true);
+    // Source Media mode: Keep source unmuted so translator can hear it; unmute output to monitor
+    setSourceAudioMuted(false);
     setOutputAudioMuted(false);
     showMessage('Source Media mode: Original audio prioritized (90%/10%)', 'info');
   };
@@ -846,7 +871,7 @@ const StudioTest: React.FC = () => {
 
               <div className="volume-control">
                 <label htmlFor="outputVolume">
-                  🔊 Output Monitor Volume: {Math.round(outputVolume * 100)}%
+                  🔊 Output Volume: {Math.round(outputVolume * 100)}%
                 </label>
                 <input
                   id="outputVolume"

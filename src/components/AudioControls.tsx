@@ -20,6 +20,16 @@ const AudioControls: React.FC<AudioControlsProps> = ({ onMicrophoneChange, isAct
 
   useEffect(() => {
     checkMicrophonePermission();
+
+    // Auto-detect when Bluetooth/USB audio devices are connected or disconnected
+    const handleDeviceListChange = () => {
+      console.log('🎧 Audio devices changed - refreshing list...');
+      loadDevices();
+    };
+    navigator.mediaDevices.addEventListener('devicechange', handleDeviceListChange);
+    return () => {
+      navigator.mediaDevices.removeEventListener('devicechange', handleDeviceListChange);
+    };
   }, []);
 
   useEffect(() => {

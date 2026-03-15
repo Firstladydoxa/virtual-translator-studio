@@ -14,11 +14,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, currentPage, onNavig
 
   const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
   const isDesigner = user?.role === 'designer';
+  const isTranslator = user?.role === 'translator';
 
   const menuItems = [
     { id: 'home', label: 'Home', icon: '🏠' },
     { id: 'monitorlive', label: 'Monitor Live', icon: '📡' },
     { id: 'studiotest', label: 'Translation Studio (Audio Mix)', icon: '🎚️' },
+    { id: 'relay-studio', label: 'Pivot Translation Studio', icon: '🔄' },
+    { id: 'sign-studio', label: 'Sign Language Studio', icon: '🤟' },
     // Translation Studio menu item removed - using Studio Test exclusively
   ];
 

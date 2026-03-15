@@ -163,7 +163,7 @@
   font-size: 0.95em;
 }
 
-.notification-message {
+.notification-center .notification-message {
   color: #666;
   font-size: 0.9em;
   margin-bottom: 6px;

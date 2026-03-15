@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { languageService } from '../services/api';
 import { Language } from '../types';
@@ -21,7 +21,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { register } = useAuth();
+
+  const fieldRefs = {
+    fullname: useRef<HTMLInputElement>(null),
+    email: useRef<HTMLInputElement>(null),
+    country: useRef<HTMLSelectElement>(null),
+    language: useRef<HTMLSelectElement>(null),
+    password: useRef<HTMLInputElement>(null),
+  };
 
   useEffect(() => {
     loadLanguages();
@@ -38,27 +47,56 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    // Clear field error as user fixes it
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => { const next = { ...prev }; delete next[name]; return next; });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    setLoading(true);
 
-    if (!formData.language) {
-      setError('Please select a translation language');
-      setLoading(false);
+    // Client-side field validation
+    const errors: Record<string, string> = {};
+    if (!formData.fullname.trim() || formData.fullname.trim().length < 2)
+      errors.fullname = 'Full name is required (at least 2 characters).';
+    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+      errors.email = 'A valid email address is required.';
+    if (!formData.country)
+      errors.country = 'Please select your country.';
+    if (!formData.language)
+      errors.language = languages.length === 0
+        ? 'Language list is still loading — please wait and try again.'
+        : 'Please select your translation language.';
+    if (!formData.password || formData.password.length < 6)
+      errors.password = 'Password must be at least 6 characters.';
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      // Scroll to and focus the first invalid field
+      const firstField = (['fullname', 'email', 'country', 'language', 'password'] as const)
+        .find(f => errors[f]);
+      if (firstField) {
+        const ref = fieldRefs[firstField].current;
+        if (ref) {
+          ref.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          ref.focus();
+        }
+      }
       return;
     }
 
+    setFieldErrors({});
+    setLoading(true);
+
     try {
-      // Auto-generate username from email (part before @)
-      const username = formData.email.split('@')[0];
+      // Auto-generate username from email (part before @), minimum 3 characters
+      const emailPrefix = formData.email.split('@')[0];
+      const username = emailPrefix.length >= 3 ? emailPrefix : (emailPrefix + '___').slice(0, 3);
       
       await register({
         ...formData,
@@ -69,7 +107,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
         onShowLogin();
       }, 2000);
     } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.');
+      // Extract the actual validation message from the server response
+      const serverErrors = err.response?.data?.errors;
+      const serverError = err.response?.data?.error;
+      if (serverErrors && serverErrors.length > 0) {
+        setError(serverErrors.map((e: any) => e.msg).join('. '));
+      } else if (serverError) {
+        setError(serverError);
+      } else {
+        setError(err.message || 'Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -83,9 +130,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}
           
-          <div className="form-group">
-            <label htmlFor="fullname">Full Name</label>
+          <div className={`form-group${fieldErrors.fullname ? ' field-error' : ''}`}>
+            <label htmlFor="fullname">Full Name <span className="required-star">*</span></label>
             <input
+              ref={fieldRefs.fullname}
               type="text"
               id="fullname"
               name="fullname"
@@ -95,11 +143,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
               required
               disabled={loading}
             />
+            {fieldErrors.fullname && <span className="field-error-hint">{fieldErrors.fullname}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+          <div className={`form-group${fieldErrors.email ? ' field-error' : ''}`}>
+            <label htmlFor="email">Email <span className="required-star">*</span></label>
             <input
+              ref={fieldRefs.email}
               type="email"
               id="email"
               name="email"
@@ -109,11 +159,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
               required
               disabled={loading}
             />
+            {fieldErrors.email && <span className="field-error-hint">{fieldErrors.email}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="country">Country</label>
+          <div className={`form-group${fieldErrors.country ? ' field-error' : ''}`}>
+            <label htmlFor="country">Country <span className="required-star">*</span></label>
             <select
+              ref={fieldRefs.country}
               id="country"
               name="country"
               value={formData.country}
@@ -128,11 +180,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
                 </option>
               ))}
             </select>
+            {fieldErrors.country && <span className="field-error-hint">{fieldErrors.country}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="language">Translation Language</label>
+          <div className={`form-group${fieldErrors.language ? ' field-error' : ''}`}>
+            <label htmlFor="language">Translation Language <span className="required-star">*</span></label>
             <select
+              ref={fieldRefs.language}
               id="language"
               name="language"
               value={formData.language}
@@ -147,11 +201,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
                 </option>
               ))}
             </select>
+            {fieldErrors.language && <span className="field-error-hint">{fieldErrors.language}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          <div className={`form-group${fieldErrors.password ? ' field-error' : ''}`}>
+            <label htmlFor="password">Password <span className="required-star">*</span></label>
             <input
+              ref={fieldRefs.password}
               type="password"
               id="password"
               name="password"
@@ -162,6 +218,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onShowLogin }) => {
               disabled={loading}
               minLength={6}
             />
+            {fieldErrors.password && <span className="field-error-hint">{fieldErrors.password}</span>}
           </div>
 
           <button type="submit" className="btn-primary" disabled={loading}>

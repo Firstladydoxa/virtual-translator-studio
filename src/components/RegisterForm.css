@@ -86,6 +86,28 @@
   font-weight: 500;
 }
 
+/* Required field indicator */
+.required-star {
+  color: #d32f2f;
+  margin-left: 2px;
+  font-weight: 700;
+}
+
+/* Field-level validation error state */
+.form-group.field-error input,
+.form-group.field-error select {
+  border: 2px solid #d32f2f !important;
+  background-color: #fff8f8;
+}
+
+.field-error-hint {
+  display: block;
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .register-form {

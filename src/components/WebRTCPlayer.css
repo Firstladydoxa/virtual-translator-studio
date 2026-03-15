@@ -9,7 +9,7 @@
 
 .webrtc-player h3 {
   margin: 0 0 10px 0;
-  color: #fff;
+  color: #fff !important;
   font-size: 16px;
 }
 
@@ -51,7 +51,7 @@
   gap: 10px;
   align-items: center;
   margin-top: 15px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .btn-control {
@@ -67,11 +67,23 @@
 }
 
 .btn-control-compact {
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
   flex: 1;
   min-width: 0;
   max-width: calc(50% - 5px);
+  border-radius: 4px;
+  border: none;
+  background: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-control-compact:hover {
+  background: #45a049;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
 }
 
 .btn-control:hover {
