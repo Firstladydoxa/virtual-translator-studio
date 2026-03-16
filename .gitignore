@@ -25,3 +25,6 @@ yarn-error.log*
 virtual-studio-release.keystore
 keystore-base64.txt
 keystore.properties
+
+# Documentation files
+*.md
