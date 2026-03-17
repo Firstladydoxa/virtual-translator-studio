@@ -22,7 +22,7 @@ const AppContent: React.FC = () => {
   const [showRegister, setShowRegister] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState('studiotest');
 
   // Initialize OneSignal once when user is authenticated
   useEffect(() => {

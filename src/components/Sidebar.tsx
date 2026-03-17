@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, currentPage, onNavig
   const isTranslator = user?.role === 'translator';
 
   const menuItems = [
-    { id: 'home', label: 'Home', icon: '🏠' },
+    { id: 'home', label: 'About Platform', icon: 'ℹ️' },
     { id: 'monitorlive', label: 'Monitor Live', icon: '📡' },
     { id: 'studiotest', label: 'Translation Studio (Audio Mix)', icon: '🎚️' },
     { id: 'relay-studio', label: 'Pivot Translation Studio', icon: '🔄' },
