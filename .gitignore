@@ -25,6 +25,7 @@ yarn-error.log*
 virtual-studio-release.keystore
 keystore-base64.txt
 keystore.properties
+loveworld-translators.keystore
 
 # Documentation files
 *.md

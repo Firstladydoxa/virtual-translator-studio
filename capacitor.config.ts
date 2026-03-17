@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'org.tniglobal.virtualstudio',
+  appId: 'org.tniglobal.translatorsvirtualstudio',
   appName: 'Loveworld Translators Virtual Studio',
   webDir: 'build',
   server: {
