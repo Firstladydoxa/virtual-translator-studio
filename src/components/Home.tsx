@@ -19,7 +19,7 @@ const Home: React.FC = () => {
             workspace in your pocket — works on any device, any browser, no download required.
           </p>
           <div className="about-hero-pills">
-            <span className="about-pill">🎙️ WebRTC Audio</span>
+            <span className="about-pill">🎙️ Real-time Audio</span>
             <span className="about-pill">📡 Live Streaming</span>
             <span className="about-pill">📱 Mobile Ready</span>
             <span className="about-pill">🔒 Secure</span>
@@ -60,8 +60,8 @@ const Home: React.FC = () => {
               and mic output controlled independently.
             </p>
             <ul className="studio-card-list">
-              <li>✦ Built-in HLS relay player</li>
-              <li>✦ Independent volume for monitor & mic</li>
+              <li>✦ Built-in relay video player</li>
+              <li>✦ Independent volume for monitor &amp; mic</li>
               <li>✦ Real-time relay switching</li>
             </ul>
             <div className="studio-card-tag">Relay Studio</div>
@@ -158,7 +158,7 @@ const Home: React.FC = () => {
           <div className="benefit-tile">
             <div className="benefit-tile-icon">⚡</div>
             <h4>Ultra-Low Latency</h4>
-            <p>WebRTC delivers sub-second audio so your translation stays perfectly in sync.</p>
+            <p>Advanced real-time streaming delivers sub-second audio so your translation stays perfectly in sync.</p>
           </div>
           <div className="benefit-tile">
             <div className="benefit-tile-icon">🔔</div>
