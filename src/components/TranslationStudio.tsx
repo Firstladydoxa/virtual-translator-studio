@@ -4,6 +4,7 @@ import { useAppStore } from '../store/useAppStore';
 import VideoPlayer from './VideoPlayer';
 import AudioControls from './AudioControls';
 import LiveStatusIndicator from './LiveStatusIndicator';
+import RecordingControls, { RECORDING_ENABLED } from './RecordingControls';
 import { streamingService } from '../services/api';
 import './TranslationStudio.css';
 
@@ -490,6 +491,10 @@ const TranslationStudio: React.FC = () => {
                 'Ready to Translate'}
             </div>
           </div>
+
+          {RECORDING_ENABLED && (
+            <RecordingControls getStream={() => mediaStreamRef.current} language={language} />
+          )}
         </div>
       </div>
     </div>
