@@ -4,6 +4,7 @@ import VideoPlayer from './VideoPlayer';
 import WebRTCPlayer from './WebRTCPlayer';
 import AudioControls from './AudioControls';
 import LiveStatusIndicator from './LiveStatusIndicator';
+import RecordingControls, { RECORDING_ENABLED } from './RecordingControls';
 import { streamingService } from '../services/api';
 import webrtcService from '../services/webrtcService';
 import './StudioTest.css';
@@ -943,6 +944,10 @@ const StudioTest: React.FC = () => {
                 'Ready to Translate'}
             </div>
           </div>
+
+          {RECORDING_ENABLED && (
+            <RecordingControls getStream={() => mediaStreamRef.current} language={language} />
+          )}
 
           {/* Automatic Time Tracking Info - Moved to bottom */}
           <div className="time-tracking-controls">
