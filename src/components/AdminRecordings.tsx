@@ -20,6 +20,9 @@ const formatSize = (bytes: number) =>
       ? `${(bytes / 1024 / 1024).toFixed(1)} MB`
       : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 
+const formatLanguage = (text: string) =>
+  text.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
 const extensionFor = (mime: string) => (mime.includes('mp4') ? 'm4a' : mime.includes('ogg') ? 'ogg' : 'webm');
 const safeName = (text: string) => text.replace(/[^\w-]+/g, '_').replace(/^_+|_+$/g, '') || 'unknown';
 
@@ -101,7 +104,7 @@ const AdminRecordings: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${safeName(rec.translatorName || '')}_${safeName(rec.languageLabel || rec.language)}_${rec.createdAt.slice(0, 19).replace(/[:T]/g, '-')}.${extensionFor(rec.mimeType)}`;
+      a.download = `${safeName(rec.translatorName || '')}_${safeName(formatLanguage(rec.languageLabel || rec.language))}_${rec.createdAt.slice(0, 19).replace(/[:T]/g, '-')}.${extensionFor(rec.mimeType)}`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -179,7 +182,7 @@ const AdminRecordings: React.FC = () => {
         >
           <option value="">All languages</option>
           {(data?.languages || []).map((l) => (
-            <option key={l} value={l}>{l}</option>
+            <option key={l} value={l}>{formatLanguage(l)}</option>
           ))}
         </select>
         <label>
@@ -218,7 +221,7 @@ const AdminRecordings: React.FC = () => {
               <React.Fragment key={rec.id}>
                 <tr className={busyId === rec.id ? 'busy' : ''}>
                   <td data-label="Translator">{rec.translatorName}</td>
-                  <td data-label="Language">{rec.languageLabel || rec.language || '—'}</td>
+                  <td data-label="Language">{formatLanguage(rec.languageLabel || rec.language || '—')}</td>
                   <td data-label="Date">{new Date(rec.createdAt).toLocaleString()}</td>
                   <td data-label="Duration">{formatDuration(rec.durationSeconds)}</td>
                   <td data-label="Size">{formatSize(rec.sizeBytes)}</td>

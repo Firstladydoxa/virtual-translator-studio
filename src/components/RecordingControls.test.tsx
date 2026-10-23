@@ -102,3 +102,15 @@ test('offers recovery of unsaved recordings from a previous session', async () =
   expect(await screen.findByText(/Unsaved recordings on this device/)).toBeInTheDocument();
   expect(screen.getByText(/01:05/)).toBeInTheDocument();
 });
+
+test('shows the registered language and uses it for the upload', async () => {
+  (recordingService.upload as jest.Mock).mockResolvedValue({ id: '1' });
+  render(<RecordingControls getStream={makeStream} language="munga_lelau" />);
+  expect(screen.getByText('Munga Lelau')).toBeInTheDocument();
+
+  fireEvent.click(screen.getByText(/Start Recording/));
+  await screen.findByText('Recording');
+  fireEvent.click(screen.getByText(/Stop & Save/));
+  await waitFor(() => expect(recordingService.upload).toHaveBeenCalled());
+  expect((recordingService.upload as jest.Mock).mock.calls[0][1].language).toBe('munga_lelau');
+});

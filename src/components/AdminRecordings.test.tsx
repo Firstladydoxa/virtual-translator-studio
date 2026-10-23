@@ -41,7 +41,7 @@ test('lists recordings with translator, language and date', async () => {
   render(<AdminRecordings />);
   expect(await screen.findByText('Olivia Owner')).toBeInTheDocument();
   expect(screen.getByText('Otto Other')).toBeInTheDocument();
-  expect(screen.getByText('French')).toBeInTheDocument();
+  expect(screen.getAllByText('French').length).toBe(2); // dropdown option + table cell
   expect(screen.getAllByText('02:05').length).toBe(2);
   expect(screen.getByText('Total size')).toBeInTheDocument();
 });

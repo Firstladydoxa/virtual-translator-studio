@@ -10,6 +10,9 @@ interface RecordingControlsProps {
   language: string;
 }
 
+const formatLanguage = (text: string) =>
+  text.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
 export const RECORDING_ENABLED = process.env.REACT_APP_RECORDING_ENABLED === 'true';
 
 const formatTime = (total: number) => {
@@ -201,6 +204,9 @@ const RecordingControls: React.FC<RecordingControlsProps> = ({ getStream, langua
     <div className="recording-controls">
       <h3>My Recording</h3>
       <p className="recording-hint">Record your voice while translating. Independent from the live stream.</p>
+      {language && language !== 'unknown' && (
+        <p className="recording-language">Recording language: <strong>{formatLanguage(language)}</strong> (your registered language)</p>
+      )}
 
       {busy ? (
         <div className="recording-active">

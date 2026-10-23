@@ -493,7 +493,10 @@ const TranslationStudio: React.FC = () => {
           </div>
 
           {RECORDING_ENABLED && (
-            <RecordingControls getStream={() => mediaStreamRef.current} language={language} />
+            <RecordingControls
+              getStream={() => mediaStreamRef.current}
+              language={user?.translationLanguage?.label || user?.translationLanguage?.value || language}
+            />
           )}
         </div>
       </div>
