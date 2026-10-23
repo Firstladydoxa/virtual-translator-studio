@@ -4,6 +4,7 @@ import { languageService } from '../services/api';
 import { Language } from '../types';
 import NotificationComposer from './NotificationComposer';
 import AdminTimeTracking from './AdminTimeTracking';
+import AdminRecordings from './AdminRecordings';
 import './AdminDashboard.css';
 
 interface User {
@@ -29,7 +30,7 @@ interface Stats {
 
 const AdminDashboard: React.FC = () => {
   const { user: currentUser } = useAppStore();
-  const [activeTab, setActiveTab] = useState<'users' | 'notifications' | 'timetracking'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'notifications' | 'timetracking' | 'recordings'>('users');
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -241,12 +242,23 @@ const AdminDashboard: React.FC = () => {
           ⏱️ Time Tracking
         </button>
         <button 
+          className={`admin-tab ${activeTab === 'recordings' ? 'active' : ''}`}
+          onClick={() => setActiveTab('recordings')}
+        >
+          🎙️ Recordings
+        </button>
+        <button 
           className={`admin-tab ${activeTab === 'notifications' ? 'active' : ''}`}
           onClick={() => setActiveTab('notifications')}
         >
           📢 Send Notifications
         </button>
       </div>
+
+      {/* Recordings Tab */}
+      {activeTab === 'recordings' && (
+        <AdminRecordings />
+      )}
 
       {/* Time Tracking Tab */}
       {activeTab === 'timetracking' && (

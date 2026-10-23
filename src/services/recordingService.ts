@@ -9,6 +9,27 @@ export interface ServerRecording {
   mimeType: string;
   startedAt?: string;
   createdAt: string;
+  translatorName?: string;
+  languageLabel?: string;
+}
+
+export interface AdminRecordingList {
+  recordings: ServerRecording[];
+  total: number;
+  page: number;
+  pages: number;
+  totalSizeBytes: number;
+  totalDurationSeconds: number;
+  languages: string[];
+}
+
+export interface AdminRecordingQuery {
+  page?: number;
+  limit?: number;
+  language?: string;
+  q?: string;
+  from?: string;
+  to?: string;
 }
 
 export const recordingService = {
@@ -38,6 +59,12 @@ export const recordingService = {
   list: async (): Promise<ServerRecording[]> => {
     const response = await api.get<{ recordings: ServerRecording[] }>('/api/recordings', { params: { limit: 20 } });
     return response.data.recordings;
+  },
+
+  adminList: async (query: AdminRecordingQuery): Promise<AdminRecordingList> => {
+    const params = Object.fromEntries(Object.entries(query).filter(([, v]) => v !== undefined && v !== ''));
+    const response = await api.get<AdminRecordingList>('/api/recordings/admin/list', { params });
+    return response.data;
   },
 
   download: async (id: string): Promise<Blob> => {
